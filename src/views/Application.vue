@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted() {
-    //
+    this.$store.dispatch('getGenerations')
   }
 }
 </script>

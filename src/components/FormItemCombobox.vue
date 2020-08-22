@@ -6,7 +6,7 @@
       @click="showOptions = true"
       v-model="data[value]"
       class="mb-n4 font-weight-bold"
-      :class="textCase ? `text-${ textCase } overline` : 'round-top'"
+      :class="textCase ? `text-${ textCase } overline` : ''"
       :label="label"
       :color="color"
       append-icon="mdi-chevron-down"
@@ -33,7 +33,7 @@
             class="round-all grey lighten-4 my-2"
             dense>
             <v-list-item-content>
-              <span v-text="item.text" />
+              <span v-text="item.text ? item.text : item.value" />
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

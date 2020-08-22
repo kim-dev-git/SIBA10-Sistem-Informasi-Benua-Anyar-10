@@ -1,8 +1,8 @@
 <template>
-  <div id="courses">
+  <div id="classrooms">
     <v-main>
       <v-btn id="button-edit-fab"
-        @click="newCourse()"
+        @click="newClassroom()"
         class="mb-13"
         color="primary"
         fixed
@@ -13,12 +13,46 @@
         <v-icon v-text="'mdi-plus'" />
         <!-- <span v-text="'Tambah'" /> -->
       </v-btn>
+      <v-sheet
+        color="grey lighten-5">
+        <v-layout
+        class="pa-4">
+          <v-spacer />
+          <v-btn
+            @click="dialogGeneration = true"
+            color="primary"
+            outlined
+            rounded>
+            <v-icon v-text="'mdi-filter'" class="ml-1" left />
+            <span v-text="filter.generation ? filter.generation : 'Angkatan'" class="text-none mr-1" />
+
+          </v-btn>
+        </v-layout>
+        <v-divider />
+      </v-sheet>
       
-      <two-line-list id="courses-list"
-        :items="courses"
-        :forms="formCourse"
-        @action="selectCourse($event)"
+      <two-line-list id="classrooms-list"
+        :items="classroomsByGeneration()"
+        :forms="formClassroom"
+        @action="selectClassroom($event)"
+        @click="$router.push('kelas/' + $event.id)"
       />
+
+      <dialog-bottom id="dialog-generation"
+        @close="filter = {}"
+        @action="$forceUpdate(), dialogGeneration = false"
+        v-model="dialogGeneration"
+        :title="'Filter bedasarkan angkatan'"
+        buttonCancel="Tampmilkan Semua"
+        buttonAction="Filter">
+        <form-item-combobox
+          :label="'Angkatan'"
+          :data="filter"
+          value="generation"
+          :items="generations"
+          color="primary"
+        />
+      </dialog-bottom>
 
       <dialog-bottom id="dialog-menu"
         v-model="dialogMenu"
@@ -45,17 +79,17 @@
       </dialog-bottom>
 
       <dialog-bottom id="dialog-edit"
-        @action="saveCourse()"
+        @action="saveClassroom()"
         v-model="dialogEdit"
         :title="dialogTitle"
         buttonCancel="Batal"
         buttonAction="Simpan"
         persistent>
-        <form-list :forms="formCourse" :data="dataCourse" />
+        <form-list :forms="formClassroom" :data="dataClassroom" :items="items" />
       </dialog-bottom>
 
       <dialog-bottom id="dialog-delete"
-        @action="deleteCourse()"
+        @action="deleteClassroom()"
         v-model="dialogDelete"
         :title="dialogTitle"
         buttonCancel="Batal"
@@ -67,7 +101,7 @@
           color="grey lighten-3"
           flat>
           <span
-            v-html="`Yakin hapus mata pelajaran <b>${ dataCourse.name }</b>?`"
+            v-html="`Yakin hapus Kelas <b>${ dataClassroom.name }</b>?`"
             class="text--secondary"
           />
         </v-card>
@@ -82,21 +116,26 @@
 import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
 import TwoLineList from '../../components/TwoLineList'
+import FormItemCombobox from '../../components/FormItemCombobox'
 export default {
   components: {
     DialogBottom,
     FormList,
     TwoLineList,
+    FormItemCombobox,
   },
   data: () => ({
+    filter: {},
     dialogTitle: '',
+    dialogGeneration: false,
     dialogMenu: false,
     dialogEdit: false,
     dialogDelete: false,
-    dataCourse: {},
-    formCourse: [
-      { label: 'Mata Pelajaran', value: 'name', type: 'text' },
-      { label: 'Singkatan', value: 'abbreviation', type: 'text' },
+    dataClassroom: {},
+    formClassroom: [
+      { label: 'Kelas', value: 'name', type: 'text' },
+      { label: 'Angkatan', value: 'generation', type: 'combobox' },
+      { label: 'Wali Kelas', value: 'homeroomName', type: 'combobox' },
     ],
     actions: [
       { text: 'Edit', icon: 'mdi-pencil' },
@@ -104,67 +143,93 @@ export default {
     ],
   }),
   computed: {
-    courses() {
-      return this.$store.state.courses.collection
+    classrooms() {
+      return this.$store.state.classrooms.collection
     },
-    course() {
-      return this.$store.state.courses.document
+    classroom() {
+      return this.$store.state.classrooms.document
     },
+    generations() {
+      return this.$store.getters.generations
+    },
+    teacherItems() {
+      return this.$store.getters['teachers/teacherItems']
+    },
+    items() {
+      
+      var items = {
+        generation: this.generations,
+        homeroomName: this.teacherItems
+      }
+      return items
+    }
   },
   methods: {
-    getCourses() {
-      this.$store.dispatch('courses/get')
+    classroomsByGeneration() {
+      var filter = this.filter.generation
+
+      if(filter) {
+        var filtered = this.classrooms.filter(classroom => {
+          return classroom.generation == filter
+        })
+        return filtered
+      } else {
+        return this.classrooms
+      }
     },
-    getCourse() {
-      let id = 'YnwMCvyau7eVe7l3IwuS'
-      this.$store.dispatch('courses/get', id)
+    getClassrooms() {
+      this.$store.dispatch('classrooms/get')
     },
-    selectCourse(course) {
-      this.dataCourse = course
+    getClassroom() {
+      // let id = 'tJtU0y6zOPJi1t8Ohjl7'
+      // this.$store.dispatch('classrooms/get', id)
+    },
+    selectClassroom(classroom) {
+      this.dataClassroom = classroom
       this.dialogMenu = true
     },
     selectAction(action) {
       this.dialogMenu = false
       if(action === 'Edit') {
-        this.dialogTitle = 'Edit Mata Pelajaran'
+        this.dialogTitle = 'Edit Kelas'
         this.dialogEdit = true
       } else {
-        this.dialogTitle = 'Hapus Mata Pelajaran'
+        this.dialogTitle = 'Hapus Kelas'
         this.dialogDelete = true
       }
     },
-    newCourse() {
-      this.dataCourse = { id: null }
-      this.dialogTitle = 'Mata Pelajaran Baru'
+    newClassroom() {
+      this.dataClassroom = { id: null }
+      this.dialogTitle = 'Kelas Baru'
       this.dialogEdit = true
     },
-    saveCourse() {
-      const data = this.dataCourse
+    saveClassroom() {
+      const data = this.dataClassroom
       if(data.id) {
-        this.$store.dispatch('courses/put', data)
+        this.$store.dispatch('classrooms/put', data)
       } else {
-        this.$store.dispatch('courses/post', data)
+        this.$store.dispatch('classrooms/post', data)
       }
       this.dialogEdit = false
       this.dialogTitle = ''
-      this.dataCourse = {}
+      this.dataClassroom = {}
     },
-    deleteCourse() {
-      const data = this.dataCourse
-      this.$store.dispatch('courses/remove', data)
+    deleteClassroom() {
+      const data = this.dataClassroom
+      this.$store.dispatch('classrooms/remove', data)
       this.dialogDelete = false
       this.dialogTitle = ''
-      this.dataCourse = {}
+      this.dataClassroom = {}
     }
   },
   mounted() {
     this.$store.dispatch('setPage', {
       back: '/app',
-      title: 'Mata Pelajaran'
+      title: 'Kelas'
     })
 
-    this.getCourses()
-    this.getCourse()
+    this.getClassrooms()
+    this.getClassroom()
   }
 }
 </script>

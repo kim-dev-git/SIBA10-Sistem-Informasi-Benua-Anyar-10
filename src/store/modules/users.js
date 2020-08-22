@@ -20,14 +20,7 @@ const actions = {
     // fetch user profile
     const userProfile = await ref.doc(user.uid).get()
 
-    // console.log('1. Payload:', user)
-
-    // console.log('2. userProfile:', userProfile)
-    // console.log('3. userProfile:', userProfile.data())
-
     var data = userProfile.data()
-
-    // console.log('4. Data:', data)
 
     data.uid = user.uid
 
@@ -37,7 +30,7 @@ const actions = {
     commit('setLoading', null, { root: true })
     
     // change route to dashboard
-    // router.push('/')
+    // router.push('/app')
   },
   async set({ commit, dispatch }, payload) {
     commit('setLoading', 'post', { root: true })

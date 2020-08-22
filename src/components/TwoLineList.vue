@@ -5,7 +5,8 @@
       <!-- <v-list-item-group> -->
         <v-list-item
           v-for="item in items"
-          :key="item.abbreviation">
+          :key="`${ item[properties[0]] }-${ item[properties[1]] }`"
+          @click="$emit('click', item)">
           <v-list-item-content>
             <div>
               <v-list-item-title v-text="item[properties[0]]" class="font-weight-bold" />
@@ -14,7 +15,7 @@
           </v-list-item-content>
           <v-list-item-action>
             <v-btn
-              @click="$emit('action', item)"
+              @click.stop="$emit('action', item)"
               icon>
               <v-icon v-text="'mdi-dots-vertical'" />
             </v-btn>

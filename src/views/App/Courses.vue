@@ -116,8 +116,8 @@ export default {
       this.$store.dispatch('courses/get')
     },
     getCourse() {
-      let id = 'YnwMCvyau7eVe7l3IwuS'
-      this.$store.dispatch('courses/get', id)
+      // let id = 'YnwMCvyau7eVe7l3IwuS'
+      // this.$store.dispatch('courses/get', id)
     },
     selectCourse(course) {
       this.dataCourse = course

@@ -6,13 +6,13 @@ import 'firebase/storage'
 
 // firebase init - add your own config here
 const firebaseConfig = {
-  apiKey: "AIzaSyAaGigMfe47eEkgoCZtWhSOYK1Pk_NmNK8",
-  authDomain: "kim-client-1.firebaseapp.com",
-  databaseURL: "https://kim-client-1.firebaseio.com",
-  projectId: "kim-client-1",
-  storageBucket: "kim-client-1.appspot.com",
-  messagingSenderId: "343528793753",
-  appId: "1:343528793753:web:fb1fdbd77d9322ddaafa08"
+  apiKey: "AIzaSyAhWeQ0o0Q4hKub8Zwp7r-h83FPgZSkpQk",
+  authDomain: "rizky-na.firebaseapp.com",
+  databaseURL: "https://rizky-na.firebaseio.com",
+  projectId: "rizky-na",
+  storageBucket: "rizky-na.appspot.com",
+  messagingSenderId: "903799187284",
+  appId: "1:903799187284:web:f36396cb68306cebfa4ac1"
 }
 firebase.initializeApp(firebaseConfig)
 

@@ -35,13 +35,13 @@ Vue.use(VueRouter)
       },
       {
         path: 'kelas',
-        name: 'Classes',
-        component: lazyLoad('App/Classes'),
+        name: 'Classrooms',
+        component: lazyLoad('App/Classrooms'),
       },
       {
         path: 'kelas/:id',
-        name: 'Class',
-        component: lazyLoad('App/Class'),
+        name: 'Classroom',
+        component: lazyLoad('App/Classroom'),
         props: true
       }
     ]

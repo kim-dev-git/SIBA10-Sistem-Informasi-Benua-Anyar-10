@@ -18,6 +18,10 @@ const mutations = {
   },
 }
 
+const getters = {
+  //
+}
+
 const actions = {
   async get({ commit }, id = null ) {
     commit('setLoading', 'get', { root: true })
@@ -32,7 +36,7 @@ const actions = {
       commit('setLoading', null, { root: true })
       
     } else {
-      ref.orderBy('name').get()
+      ref.orderBy('generation', 'desc').get()
         .then(q => {
           let array = []
           q.forEach(doc => {
@@ -46,8 +50,18 @@ const actions = {
         })
     }
   },
-  async post({ commit, dispatch }, data) {
+  async post({ commit, dispatch, rootState  }, data) {
     commit('setLoading', 'post', { root: true })
+
+    delete data.id
+
+    const teachers = rootState.teachers.collection
+
+    teachers.forEach(teacher => {
+      if(teacher.name === data.homeroomName) {
+        data.homeroomID = teacher.id
+      }
+    })
 
     await ref.add(data)
       .then(() => {
@@ -68,12 +82,20 @@ const actions = {
         commit('setLoading', null, { root: true })
       })
   },
-  async put({ commit, dispatch }, data) {
+  async put({ commit, dispatch, rootState }, data) {
     commit('setLoading', 'post', { root: true })
 
     const id = data.id
 
     delete data.id
+
+    const teachers = rootState.teachers.collection
+
+    teachers.forEach(teacher => {
+      if(teacher.name === data.homeroomName) {
+        data.homeroomID = teacher.id
+      }
+    })
 
     await ref.doc(id).set(data, { merge: true })
       .then(() => {
@@ -122,6 +144,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

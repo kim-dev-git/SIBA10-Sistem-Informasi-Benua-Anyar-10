@@ -9,7 +9,7 @@
         <v-spacer />
         <v-btn
           v-if="buttonCancel"
-          @click="dialog = false"
+          @click="dialog = false, $emit('close')"
           color="grey lighten-4"
           depressed>
           <span class="overline font-weight-bold" v-text="buttonCancel" />

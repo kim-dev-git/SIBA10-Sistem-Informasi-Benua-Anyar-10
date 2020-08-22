@@ -1,6 +1,6 @@
 import { db, Timestamp } from '../../firebase'
 
-const END_POINT = 'courses'
+const END_POINT = 'users'
 const ref = db.collection(END_POINT)
 
 const state = {
@@ -9,12 +9,36 @@ const state = {
 }
 
 const mutations = {
-  setCourses(state, val) {
+  setTeachers(state, val) {
     state.collection = val
   },
-  setCourse(state, val) {
+  setTeacher(state, val) {
     state.document = {}
     state.document = val
+  },
+}
+
+const getters = {
+  teacherItems(state) {
+    const items = []
+    state.collection.forEach(teacher => {
+      var obj = teacher
+      // obj.value = teacher.id
+      obj.value = teacher.name
+      obj.text = ''
+      if(teacher.prefix) {
+        obj.text += teacher.prefix
+      }
+      if(teacher.name) {
+        obj.text += teacher.name + ' '
+      }
+      if(teacher.suffix) {
+        obj.text += teacher.suffix
+      }
+
+      items.push(obj)
+    })
+    return items
   },
 }
 
@@ -28,11 +52,11 @@ const actions = {
       var data = q.data()
       data.id = q.id
 
-      commit('setCourse', data)
+      commit('setTeacher', data)
       commit('setLoading', null, { root: true })
       
     } else {
-      ref.orderBy('name').get()
+      ref.where('role', '==', 'Guru').get()
         .then(q => {
           let array = []
           q.forEach(doc => {
@@ -41,14 +65,14 @@ const actions = {
 
             array.push(data)
           })
-          commit('setCourses', array)
+          commit('setTeachers', array)
           commit('setLoading', null, { root: true })
         })
     }
   },
   async post({ commit, dispatch }, data) {
     commit('setLoading', 'post', { root: true })
-    
+
     delete data.id
 
     await ref.add(data)
@@ -124,6 +148,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }
