@@ -3,6 +3,21 @@
     <loading-state />
     <v-main v-if="!isLoading">
       <data-list :data="classroom" :forms="formClassroom" />
+      
+      <v-layout class="py-2 grey lighten-3">
+        <div
+          class="scroll py-2 px-4">
+          <v-btn
+            v-for="i in 32"
+            :key="i"
+            class="mr-2"
+            color="primary"
+            outlined
+            rounded>
+            <span v-text="'Kelas'" class="mx-2" />
+          </v-btn>
+        </div>
+      </v-layout>
     </v-main>
   </div>
 </template>
@@ -57,6 +72,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+  .scroll {
+    overflow: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scroll::-webkit-scrollbar {
+    display: none;  /* Chrome */
+  }
 </style>

@@ -43,7 +43,12 @@ Vue.use(VueRouter)
         name: 'Classroom',
         component: lazyLoad('App/Classroom'),
         props: true
-      }
+      },
+      {
+        path: 'jadwal',
+        name: 'Schedules',
+        component: lazyLoad('App/Schedules'),
+      },
     ]
   },
   {

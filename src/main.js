@@ -44,12 +44,12 @@ auth.onAuthStateChanged(user => {
   
     let getPermission = messaging.requestPermission()
       .then(function () {
-        console.log("Notification permission granted.")
+        // console.log("Notification permission granted.")
         // get the token in the form of promise
         return messaging.getToken()
       })
       .then(function(token) {
-        console.log("Token:", token)
+        // console.log("Token:", token)
       })
       .catch(function (err) {
         console.log("Unable to get permission to notify.", err)
