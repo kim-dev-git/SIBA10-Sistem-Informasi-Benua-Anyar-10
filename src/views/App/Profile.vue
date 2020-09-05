@@ -14,13 +14,36 @@
         <span v-text="'Edit'" />
       </v-btn>
 
-      <data-list :data="userProfile" :forms="formProfile" />
+      <data-compact :items="formProfile">
+
+        <template #avatar="{ item }">
+          <v-list-item-avatar
+            v-if="item.icon"
+            class="ml-n4 mr-0">
+            <v-icon v-text="item.icon" />
+          </v-list-item-avatar>
+        </template>
+        
+        <template #content="{ item }">
+          <v-list-item-content>
+            <span v-text="item.label" class="text--secondary" />
+          </v-list-item-content>
+        </template>
+        
+        <template #action="{ item }">
+          <span v-text="userProfile[item.value]" class="font-weight-bold" />
+        </template>
+
+      </data-compact>
+
+      <!-- <data-list :data="userProfile" :forms="formProfile" /> -->
 
       <v-layout id="button-logout"
         class="align-center mt-4"
         column>
         <v-btn
           @click="logout()"
+          class="mb-4"
           color="error">
           <span v-text="'Keluar'" />
         </v-btn>
@@ -44,12 +67,12 @@
 <script>
 import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
-import DataList from '../../components/DataList'
+import DataCompact from '../../components/DataCompact'
 export default {
   components: {
     DialogBottom,
     FormList,
-    DataList,
+    DataCompact,
   },
   data: () => ({
     dialogProfile: false,
