@@ -1,42 +1,107 @@
 <template>
   <div id="data-list">
-    <v-list>
-      <v-list-item
-        v-for="form in forms"
-        :key="form.value">
-        <v-layout
-          class="mx-n4"
-          column>
 
-          <v-layout
-            class="pl-4 pr-6">
-            <v-list-item-avatar
-              v-if="form.icon"
-              class="ml-n4 mr-0">
-              <v-icon v-text="form.icon" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <span v-text="form.label" class="text--secondary" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <span v-text="data[form.value]" class="font-weight-bold" />
-            </v-list-item-action>
-          </v-layout>
-        
-        <v-divider />
-        
-      </v-layout>
-      </v-list-item>
-    </v-list>
+    <data-search v-model="search" />
+
+    <data-table
+      v-if="$vuetify.breakpoint.smAndUp"
+      @edit="onEdit($event)"
+      @remove="onRemove($event)"
+      :headers="headers"
+      :items="filteredItems()">
+
+      <template #row="{ value, header, item }">
+        <slot name="column"
+          :item="item"
+          :value="item[header.value]"
+          :header="header"
+        />
+      </template>
+
+    </data-table>
+
+    <data-compact
+      v-else
+      :forms="forms"
+      :items="filteredItems()"
+      @click="onClick($event)"
+      @action="onAction($event)">
+      
+      <template #content="{ item }">
+        <slot name="compact-content" :item="item" />
+      </template>
+
+    </data-compact>
+
   </div>
 </template>
 
 <script>
+
+import DataSearch from './DataSearch'
+import DataTable from './DataTable'
+import DataCompact from './DataCompact'
 export default {
+  components: {
+    DataSearch,
+    DataTable,
+    DataCompact
+  },
   props: [
     'forms',
-    'data'
-  ]
+    'headers',
+    'items'
+  ],
+  data: () => ({
+    search: null,
+  }),
+  methods: {
+    filteredItems() {
+      var arr = this.items
+      var search = this.search
+      var forms = [...this.forms]
+
+      const newArr = []
+
+      function match(key, search) {
+        arr.map(obj => {
+          if (obj[key] && obj[key].toLowerCase().indexOf(search) !== -1) {
+            var check = newArr.filter(v => v.id === obj.id).length > 0
+            
+            if(!check) {
+              newArr.push(obj)
+            }
+          }
+        })
+      }
+
+      if(!search) {
+        return arr
+      } else {
+        var filterVal = this.search.toLowerCase()
+        
+        forms.forEach(form => {
+          if(form.value !== 'createdAt' && form.value !== 'editedAt') {
+            match(form.value, filterVal)
+          }
+        })
+      }
+
+      return newArr
+    },
+    onClick(item) {
+      this.$emit('click', item)
+    },
+    onAction(item) {
+      this.$emit('action', item)
+    },
+    onEdit(item) {
+      this.$emit('edit', item)
+    },
+    onRemove(item) {
+      this.$emit('remove', item)
+    },
+  }
 }
 </script>
 

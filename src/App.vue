@@ -1,9 +1,10 @@
 <template>
   <v-app>
     <notification-list />
-    <v-main class="pt-0 base">
+    <v-main class="base">
       <transition name="fade" mode="out-in">
-        <router-view />
+        <FullPageError v-if="error" :error="error" />
+        <router-view v-else />
       </transition>
     </v-main>
   </v-app>
@@ -12,16 +13,23 @@
 <script>
 
 import NotificationList from './components/NotificationList'
+import FullPageError from './components/FullPageError'
 export default {
   name: 'App',
 
   components: {
     NotificationList,
+    FullPageError,
   },
 
   data: () => ({
     //
   }),
+  computed: {
+    error() {
+      return this.$store.state.error
+    }
+  }
 };
 </script>
 

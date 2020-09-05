@@ -1,8 +1,21 @@
 <template>
   <div id="schedules">
-    <v-main>
-      {{ classrooms }}
-    </v-main>
+    <div>
+      <div>
+        <p v-text="'Collection'" />
+        <v-layout v-for="data in schedules" :key="data.id">
+          <span v-text="data" />
+          <v-spacer />
+          <v-btn @click="editSchedules(data)" color="info">Edit</v-btn>
+          <v-btn @click="removeSchedules(data)" color="error">Hapus</v-btn>
+        </v-layout>
+      </div>
+      <div>
+        <p v-text="'Document'" />
+        <p v-text="schedule" />
+      </div>
+      <v-btn @click="postSchedules()">Post</v-btn>
+    </div>
   </div>
 </template>
 
@@ -11,11 +24,35 @@ export default {
   computed: {
     classrooms() {
       return this.$store.state.classrooms.collection
-    }
+    },
+    schedules() {
+      return this.$store.state.schedules.collection
+    },
+    schedule() {
+      return this.$store.state.schedules.document
+    },
   },
   methods: {
     getClassrooms() {
       this.$store.dispatch('classrooms/get')
+    },
+    getSchedules() {
+      this.$store.dispatch('schedules/get')
+      this.$store.dispatch('schedules/get', 'H3kURogEgo3tvehxwzuE')
+    },
+    postSchedules() {
+      var data = {
+        a: 'Judul',
+        b: 'Deskripsi',
+      }
+      this.$store.dispatch('schedules/post', data)
+    },
+    removeSchedules(data) {
+      this.$store.dispatch('schedules/remove', data)
+    },
+    editSchedules(data) {
+      data.a = 'Edited'
+      this.$store.dispatch('schedules/put', data)
     }
   },
   mounted() {
@@ -25,6 +62,7 @@ export default {
     })
 
     this.getClassrooms()
+    this.getSchedules()
   }
 }
 </script>

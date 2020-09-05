@@ -7,6 +7,9 @@ import vuetify from './plugins/vuetify'
 import { auth, messaging } from './firebase'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 
+import './filters/fullDate'
+import './filters/dayDate'
+
 Vue.config.productionTip = false
 Vue.component(VueQrcode.name, VueQrcode)
 

@@ -52,7 +52,6 @@ const actions = {
           body: err,
           timeout: 10
         }, { root: true })
-        
         commit('setLoading', null, { root: true })
       })
   },

@@ -1,13 +1,11 @@
 <template>
   <div id="class">
-    <v-main>
-      <v-container>
-        <v-layout column class="mt-n4">
-          <p class="mb-2 mt-4 title" v-text="'Daftar kelas'" />
-          <compact-list :items="items" :headers="headers" />
-        </v-layout>
-      </v-container>
-    </v-main>
+    <v-container>
+      <v-layout column class="mt-n4">
+        <p class="mb-2 mt-4 title" v-text="'Daftar kelas'" />
+        <compact-list :items="items" :headers="headers" />
+      </v-layout>
+    </v-container>
   </div>
 </template>
 

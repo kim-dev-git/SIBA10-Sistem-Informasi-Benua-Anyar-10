@@ -3,6 +3,8 @@
     <v-snackbar
       v-model="snackbar"
       :timeout="notification.timeout ? notification.timeout * 1000 : 4000"
+      :top="$vuetify.breakpoint.smAndUp"
+      :right="$vuetify.breakpoint.smAndUp"
       multi-line
     >
       <v-layout

@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard">
-    <v-main>
+    <div>
 
       <v-container>
         <v-layout column>
@@ -8,7 +8,7 @@
           <card-list :items="items" />
         </v-layout>
       </v-container>
-    </v-main>
+    </div>
     
   </div>
 </template>

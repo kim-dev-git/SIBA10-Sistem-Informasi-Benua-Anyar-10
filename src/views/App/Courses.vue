@@ -1,6 +1,6 @@
 <template>
   <div id="courses">
-    <v-main>
+    <div>
       <v-btn id="button-edit-fab"
         @click="newCourse()"
         class="mb-13"
@@ -73,7 +73,7 @@
         </v-card>
       </dialog-bottom>
 
-    </v-main>
+    </div>
   </div>
 </template>
 

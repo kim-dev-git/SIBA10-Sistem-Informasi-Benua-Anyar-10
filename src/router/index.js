@@ -49,6 +49,11 @@ Vue.use(VueRouter)
         name: 'Schedules',
         component: lazyLoad('App/Schedules'),
       },
+      {
+        path: 'inventaris',
+        name: 'Inventory',
+        component: lazyLoad('App/Inventory'),
+      },
     ]
   },
   {

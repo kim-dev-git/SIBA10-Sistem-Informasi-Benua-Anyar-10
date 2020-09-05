@@ -1,7 +1,7 @@
 <template>
   <div id="classroom">
     <loading-state />
-    <v-main v-if="!isLoading">
+    <div v-if="!isLoading">
       <data-list :data="classroom" :forms="formClassroom" />
       
       <v-layout class="py-2 grey lighten-3">
@@ -18,7 +18,7 @@
           </v-btn>
         </div>
       </v-layout>
-    </v-main>
+    </div>
   </div>
 </template>
 

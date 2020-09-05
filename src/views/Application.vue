@@ -1,12 +1,14 @@
 <template>
-  <div id="main">
+  <div id="main" class="pr-sm-4">
     <the-navigation-top />
     <the-navigation-bottom />
-    <v-main class="pt-0">
-      <transition name="fade" mode="out-in">
-        <router-view />
-      </transition>
-    </v-main>
+      <v-card
+        class="ma-sm-4 mt-sm-6"
+        tile>
+        <transition name="fade" mode="out-in">
+            <router-view />
+        </transition>
+      </v-card>
 
     <dialog-bottom id="dialog-select-role"
       v-model="dialogSelectRole"

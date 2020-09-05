@@ -1,6 +1,6 @@
 <template>
   <div id="profile">
-    <v-main>
+    <div>
       <v-btn id="button-edit-fab"
         @click="openDialogProfile()"
         class="mb-13"
@@ -25,7 +25,7 @@
           <span v-text="'Keluar'" />
         </v-btn>
       </v-layout>
-    </v-main>
+    </div>
 
     
     <dialog-bottom id="dialog-profile"

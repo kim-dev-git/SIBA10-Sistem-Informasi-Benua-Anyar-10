@@ -26,7 +26,7 @@ if(firebase.messaging.isSupported()) {
   messaging = firebase.messaging()
 }
 const { Timestamp, GeoPoint } = firebase.firestore
-const { increment } = firebase.firestore.FieldValue
+const { increment, serverTimestamp } = firebase.firestore.FieldValue
 
 // Offline support
 db.enablePersistence()
@@ -40,5 +40,6 @@ export {
   messaging,
   Timestamp,
   GeoPoint,
-  increment
+  increment,
+  serverTimestamp
 }

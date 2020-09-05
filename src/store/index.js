@@ -8,6 +8,8 @@ import users from './modules/users'
 import courses from './modules/courses'
 import classrooms from './modules/classrooms'
 import teachers from './modules/teachers'
+import schedules from './modules/schedules'
+import inventorys from './modules/inventorys'
 
 Vue.use(Vuex)
 
@@ -18,8 +20,11 @@ export default new Vuex.Store({
     courses,
     classrooms,
     teachers,
+    schedules,
+    inventorys,
   },
   state: {
+    error: null,
     isLoading: null,
     page: {
       back: null,
@@ -27,11 +32,12 @@ export default new Vuex.Store({
     },
     activeNavigation: null,
     menuNavigation: [
-      { text: 'Dasbor', icon: 'mdi-view-dashboard', link: '/app', permission: ['Guru', 'Tata Usaha'] },
+      { text: 'Dasbor', icon: 'mdi-view-dashboard', link: '/app', permission: ['Guru'] },
       { text: 'Jadwal', icon: 'mdi-calendar-clock', link: '/app/jadwal', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Kelas', icon: 'mdi-account-group', link: '/app/kelas', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Matpel', icon: 'mdi-bookmark', link: '/app/matapelajaran', permission: ['Tata Usaha'] },
       { text: 'Nilai', icon: 'mdi-counter', link: '/app/nilai', permission: ['Guru'] },
+      { text: 'Inventaris', icon: 'mdi-counter', link: '/app/inventaris', permission: ['Tata Usaha'] },
       { text: 'Profil', icon: 'mdi-account', link: '/app/profil', permission: ['Guru', 'Tata Usaha'] },
     ],
     generations: []
@@ -67,6 +73,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setError(state, val) {
+      state.error = val
+    },
     setLoading(state, val) {
       state.isLoading = val
     },
