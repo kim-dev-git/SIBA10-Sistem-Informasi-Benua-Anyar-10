@@ -11,7 +11,7 @@
           <span v-text="'Mata Pelajaran'" />
         </v-btn>
       </v-layout>
-      <div>
+      <!-- <div>
         <p v-text="'Collection'" />
         <v-layout v-for="data in schedules" :key="data.id">
           <span v-text="data" />
@@ -24,7 +24,7 @@
         <p v-text="'Document'" />
         <p v-text="schedule" />
       </div>
-      <v-btn @click="postSchedules()">Post</v-btn>
+      <v-btn @click="postSchedules()">Post</v-btn> -->
     </v-container>
   </div>
 </template>

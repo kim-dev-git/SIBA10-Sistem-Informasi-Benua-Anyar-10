@@ -35,7 +35,7 @@
                     <v-btn
                       v-bind="attrs"
                       v-on="on"
-                      @click="menuAction(menu.action, item)"
+                      @click.stop="menuAction(menu.action, item)"
                       color="info"
                       icon>
                       <v-icon v-text="menu.icon" :color="menu.color" />

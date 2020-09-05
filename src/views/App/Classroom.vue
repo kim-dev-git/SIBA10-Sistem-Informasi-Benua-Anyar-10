@@ -2,7 +2,28 @@
   <div id="classroom">
     <loading-state />
     <div v-if="!isLoading">
-      {{ classroom }}
+      
+      <data-compact :items="formClassroom">
+
+        <template #avatar="{ item }">
+          <v-list-item-avatar
+            v-if="item.icon"
+            class="ml-n4 mr-0">
+            <v-icon v-text="item.icon" />
+          </v-list-item-avatar>
+        </template>
+        
+        <template #content="{ item }">
+          <v-list-item-content>
+            <span v-text="item.label" class="text--secondary" />
+          </v-list-item-content>
+        </template>
+        
+        <template #action="{ item }">
+          <span v-text="classroom[item.value]" class="font-weight-bold" />
+        </template>
+
+      </data-compact>
       
       <!-- <data-list :data="classroom" :forms="formClassroom" />
       
@@ -28,14 +49,12 @@
 
 import LoadingState from '../../components/LoadingState'
 import DialogBottom from '../../components/DialogBottom'
-import FormList from '../../components/FormList'
-import DataList from '../../components/DataList'
+import DataCompact from '../../components/DataCompact'
 export default {
   components: {
     LoadingState,
     DialogBottom,
-    FormList,
-    DataList,
+    DataCompact,
   },
   props: [
     'id'
@@ -62,7 +81,7 @@ export default {
         if(this.classroom && this.classroom.name) {
           this.$store.dispatch('setPage', {
             back: '/app/kelas',
-            title: `Detail Kelas ${ this.classroom.name } (${ this.classroom.generation })`
+            title: `Kelas ${ this.classroom.name } (${ this.classroom.generation })`
           })
         }
       }

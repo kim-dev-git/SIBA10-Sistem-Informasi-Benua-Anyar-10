@@ -6,11 +6,16 @@
     :permanent="$vuetify.breakpoint.smAndUp"
   >
     <v-list-item class="px-2 py-1">
-      <v-list-item-avatar>
-        <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-      </v-list-item-avatar>
+      <v-avatar
+        class="mr-n2"
+        color="primary"
+        size="32"
+        v-bind="attrs"
+        v-on="on">
+        <span v-text="userProfile.name.substr(0, 1)" class="white--text subtitle-2" v-if="userProfile && userProfile.name" />
+      </v-avatar>
 
-      <v-list-item-title>John Leider</v-list-item-title>
+      <v-list-item-title v-text="userProfile.name" class="ml-4" />
 
       <v-btn
         icon
@@ -59,6 +64,9 @@ export default {
     ...mapGetters([
       'menuNavigation',
     ]),
+    userProfile() {
+      return this.$store.state.users.profile
+    }
   }
 }
 </script>

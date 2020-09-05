@@ -45,13 +45,17 @@
 
           <template #compact-content="{ item }">
             <div>
-              <v-chip color="success" dark small outlined>
+              <v-chip color="success" dark small>
                 <span v-text="item.generation" class="caption" />
               </v-chip>
-              <v-chip color="info" class="ml-1" dark small outlined>
+              <v-chip color="info" class="ml-1" dark small>
                 <span v-text="'Kelas ' + item.name" class="caption" />
               </v-chip>
-              <p v-text="item.homeroomName" class="subtitle-2 mt-1 mb-0" />
+              <div
+                class="mt-1">
+                <span v-text="'Wali Kelas: '" class="subtitle-2 text--secondary" />
+                <span v-text="item.homeroomName" class="subtitle-2 mt-1 mb-0" />
+              </div>
             </div>
 
           </template>
@@ -118,7 +122,7 @@
         @action="$forceUpdate(), dialogGeneration = false"
         v-model="dialogGeneration"
         :title="'Filter bedasarkan angkatan'"
-        buttonCancel="Tampmilkan Semua"
+        buttonCancel="Tampilkan Semua"
         buttonAction="Filter">
         <form-item-combobox
           :label="'Angkatan'"
@@ -134,8 +138,6 @@
 </template>
 
 <script>
-
-import moment from 'moment'
 
 import ButtonAdd from '../../components/ButtonAdd'
 import DialogBottom from '../../components/DialogBottom'
@@ -230,15 +232,6 @@ export default {
 
     select(data) {
       this.dataClassroom = data
-      
-      moment.locale('id')
-      var date = this.dataClassroom.enteredAt
-      if(date && date.seconds) {
-        this.dataClassroom.enteredAt = moment.unix(date.seconds).format('YYYY-MM-DD')
-      } else {
-        this.dataClassroom.enteredAt = moment(date).format('DD MM YYYY')
-      }
-
       this.dialogMenu = true
     },
     selectAction(action) {
