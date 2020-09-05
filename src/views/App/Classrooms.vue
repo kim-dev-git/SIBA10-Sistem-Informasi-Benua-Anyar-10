@@ -1,18 +1,10 @@
 <template>
-  <div id="classrooms">
-    <div>
-      <v-btn id="button-edit-fab"
-        @click="newClassroom()"
-        class="mb-13"
-        color="primary"
-        fixed
-        fab
-        bottom
-        right
-        >
-        <v-icon v-text="'mdi-plus'" />
-        <!-- <span v-text="'Tambah'" /> -->
-      </v-btn>
+  <div id="classroom"
+    class="ma-n2 ml-n3">
+    <v-container>
+
+      <button-add @click="add()" />
+
       <v-sheet
         color="grey lighten-5">
         <v-layout
@@ -30,14 +22,97 @@
         </v-layout>
         <v-divider />
       </v-sheet>
-      
-      <two-line-list id="classrooms-list"
+
+      <data-list id="classroom-data"
+        :headers="headers"
         :items="classroomsByGeneration()"
         :forms="formClassroom"
-        @action="selectClassroom($event)"
-        @click="$router.push('kelas/' + $event.id)"
-      />
+        sortBy="name"
+        @edit="select($event), selectAction('edit')"
+        @remove="select($event), selectAction('remove')"
+        @action="select($event)"
+        @click="$router.push('kelas/' + $event.id)">
+        
+          <template #column="{ value, header, item }">
+            <div v-if="header.value === 'action'"></div>
+            <p id="default"
+              v-else
+              v-text="value ? value : '-'"
+              class="py-4"
+              :class="header.align ? `text-${ header.align } mb-0` : 'mb-0'"
+            />
+          </template>
 
+          <template #compact-content="{ item }">
+            <div>
+              <v-chip color="success" dark small outlined>
+                <span v-text="item.generation" class="caption" />
+              </v-chip>
+              <v-chip color="info" class="ml-1" dark small outlined>
+                <span v-text="'Kelas ' + item.name" class="caption" />
+              </v-chip>
+              <p v-text="item.homeroomName" class="subtitle-2 mt-1 mb-0" />
+            </div>
+
+          </template>
+
+      </data-list>
+
+      <dialog-bottom id="dialog-menu"
+        v-model="dialogMenu"
+        :title="'Aksi'"
+        buttonCancel="Batal">
+          <v-list
+            class="mt-n4">
+            <v-list-item-group>
+              <v-list-item
+                v-for="(action, index) in actions"
+                :key="index"
+                @click="selectAction(action.value)"
+                class="mx-n3"
+                color="primary">
+                <v-list-item-avatar>
+                  <v-icon v-text="action.icon" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <span v-text="`${ action.text }`" />
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+      </dialog-bottom>
+
+      <dialog-bottom id="dialog-edit"
+        @action="post()"
+        @close="get()"
+        v-model="dialogEdit"
+        :title="dialogTitle"
+        buttonCancel="Batal"
+        buttonAction="Simpan"
+        persistent>
+        <form-list :forms="formClassroom" :data="dataClassroom" :items="comboboxItems" />
+      </dialog-bottom>
+
+      <dialog-bottom id="dialog-delete"
+        @action="remove()"
+        v-model="dialogDelete"
+        :title="dialogTitle"
+        buttonCancel="Batal"
+        buttonAction="Hapus"
+        buttonActionColor="error"
+        persistent>
+        <v-card
+          class="pa-4"
+          color="grey lighten-3"
+          flat>
+          <span
+            v-html="`Yakin hapus data <b>Kelas ${ dataClassroom.name }(${ dataClassroom.generation })</b>?`"
+            class="text--secondary"
+          />
+        </v-card>
+      </dialog-bottom>
+
+      
       <dialog-bottom id="dialog-generation"
         @close="filter = {}"
         @action="$forceUpdate(), dialogGeneration = false"
@@ -54,74 +129,26 @@
         />
       </dialog-bottom>
 
-      <dialog-bottom id="dialog-menu"
-        v-model="dialogMenu"
-        :title="'Aksi'"
-        buttonCancel="Batal">
-          <v-list
-            class="mt-n4">
-            <v-list-item-group>
-              <v-list-item
-                v-for="(action, index) in actions"
-                :key="index"
-                @click="selectAction(action.text)"
-                class="mx-n3"
-                color="primary">
-                <v-list-item-avatar>
-                  <v-icon v-text="action.icon" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <span v-text="`${ action.text }`" />
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-      </dialog-bottom>
-
-      <dialog-bottom id="dialog-edit"
-        @action="saveClassroom()"
-        v-model="dialogEdit"
-        :title="dialogTitle"
-        buttonCancel="Batal"
-        buttonAction="Simpan"
-        persistent>
-        <form-list :forms="formClassroom" :data="dataClassroom" :items="items" />
-      </dialog-bottom>
-
-      <dialog-bottom id="dialog-delete"
-        @action="deleteClassroom()"
-        v-model="dialogDelete"
-        :title="dialogTitle"
-        buttonCancel="Batal"
-        buttonAction="Hapus"
-        buttonActionColor="error"
-        persistent>
-        <v-card
-          class="pa-4"
-          color="grey lighten-3"
-          flat>
-          <span
-            v-html="`Yakin hapus Kelas <b>${ dataClassroom.name }</b>?`"
-            class="text--secondary"
-          />
-        </v-card>
-      </dialog-bottom>
-
-    </div>
+    </v-container>
   </div>
 </template>
 
 <script>
 
+import moment from 'moment'
+
+import ButtonAdd from '../../components/ButtonAdd'
 import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
-import TwoLineList from '../../components/TwoLineList'
+import DataList from '../../components/DataList'
 import FormItemCombobox from '../../components/FormItemCombobox'
+
 export default {
   components: {
+    ButtonAdd,
     DialogBottom,
     FormList,
-    TwoLineList,
+    DataList,
     FormItemCombobox,
   },
   data: () => ({
@@ -132,14 +159,20 @@ export default {
     dialogEdit: false,
     dialogDelete: false,
     dataClassroom: {},
+    headers: [
+      { text: 'Kelas', value: 'name' },
+      { text: 'Angkatan', value: 'generation' },
+      { text: 'Wali Kelas', value: 'homeroomName' },
+      { text: '', value: 'action', sortable: false },
+    ],
     formClassroom: [
       { label: 'Kelas', value: 'name', type: 'text' },
       { label: 'Angkatan', value: 'generation', type: 'combobox' },
       { label: 'Wali Kelas', value: 'homeroomName', type: 'combobox' },
     ],
     actions: [
-      { text: 'Edit', icon: 'mdi-pencil' },
-      { text: 'Hapus', icon: 'mdi-delete' },
+      { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
+      { text: 'Hapus', value: 'remove', icon: 'mdi-delete' },
     ],
   }),
   computed: {
@@ -155,16 +188,80 @@ export default {
     teacherItems() {
       return this.$store.getters['teachers/teacherItems']
     },
-    items() {
+    comboboxItems() {
       
       var items = {
         generation: this.generations,
         homeroomName: this.teacherItems
       }
+
       return items
     }
   },
   methods: {
+    get() {
+      this.$store.dispatch('classrooms/get')
+      this.$store.dispatch('classrooms/get', 'H3kURogEgo3tvehxwzuE')
+    },
+    post() {
+      var data = this.dataClassroom
+      if(data.id) {
+        this.$store.dispatch('classrooms/put', data)
+      } else {
+        this.$store.dispatch('classrooms/post', data)
+      }
+      this.dialogEdit = false
+      this.dialogTitle = ''
+      this.dataClassroom = {}
+    },
+    remove() {
+      const data = this.dataClassroom
+      this.$store.dispatch('classrooms/remove', data)
+      this.dialogDelete = false
+      this.dialogTitle = ''
+      this.dataClassroom = {}
+    },
+
+    add() {
+      this.dataClassroom = { id: null }
+      this.dialogTitle = 'Dana BOS Baru'
+      this.dialogEdit = true
+    },
+
+    select(data) {
+      this.dataClassroom = data
+      
+      moment.locale('id')
+      var date = this.dataClassroom.enteredAt
+      if(date && date.seconds) {
+        this.dataClassroom.enteredAt = moment.unix(date.seconds).format('YYYY-MM-DD')
+      } else {
+        this.dataClassroom.enteredAt = moment(date).format('DD MM YYYY')
+      }
+
+      this.dialogMenu = true
+    },
+    selectAction(action) {
+      this.dialogMenu = false
+
+      switch (action) {
+        case 'edit':
+          this.dialogTitle = 'Edit Dana BOS'
+          this.dialogEdit = true
+          break
+        case 'remove':
+          this.dialogTitle = 'Hapus Dana BOS'
+          this.dialogDelete = true
+
+      }
+    },
+    toCurrency(value) {
+      var formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+      })
+      return formatter.format(value)
+    },
     classroomsByGeneration() {
       var filter = this.filter.generation
 
@@ -177,50 +274,6 @@ export default {
         return this.classrooms
       }
     },
-    getClassrooms() {
-      this.$store.dispatch('classrooms/get')
-    },
-    getClassroom() {
-      // let id = 'tJtU0y6zOPJi1t8Ohjl7'
-      // this.$store.dispatch('classrooms/get', id)
-    },
-    selectClassroom(classroom) {
-      this.dataClassroom = classroom
-      this.dialogMenu = true
-    },
-    selectAction(action) {
-      this.dialogMenu = false
-      if(action === 'Edit') {
-        this.dialogTitle = 'Edit Kelas'
-        this.dialogEdit = true
-      } else {
-        this.dialogTitle = 'Hapus Kelas'
-        this.dialogDelete = true
-      }
-    },
-    newClassroom() {
-      this.dataClassroom = { id: null }
-      this.dialogTitle = 'Kelas Baru'
-      this.dialogEdit = true
-    },
-    saveClassroom() {
-      const data = this.dataClassroom
-      if(data.id) {
-        this.$store.dispatch('classrooms/put', data)
-      } else {
-        this.$store.dispatch('classrooms/post', data)
-      }
-      this.dialogEdit = false
-      this.dialogTitle = ''
-      this.dataClassroom = {}
-    },
-    deleteClassroom() {
-      const data = this.dataClassroom
-      this.$store.dispatch('classrooms/remove', data)
-      this.dialogDelete = false
-      this.dialogTitle = ''
-      this.dataClassroom = {}
-    }
   },
   mounted() {
     this.$store.dispatch('setPage', {
@@ -228,8 +281,7 @@ export default {
       title: 'Kelas'
     })
 
-    this.getClassrooms()
-    this.getClassroom()
+    this.get()
   }
 }
 </script>

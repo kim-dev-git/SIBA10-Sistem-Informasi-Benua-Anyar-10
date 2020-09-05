@@ -18,6 +18,7 @@ export const get = (_collection, _id = null) => {
           let response = result.data()
 
           store.commit(_collection + '/' + setDocument, response)
+          store.commit('setLoading', null)
           return response
         } else {
           let query = db.collection(_collection)
@@ -41,6 +42,12 @@ export const get = (_collection, _id = null) => {
       }
       catch (error) {
         var message = `Error at API.get(${ _collection }/${ _id }): ${ error }`
+
+        store.dispatch('notifications/post', {
+          title: `Terjadi kesalahan.`,
+          body: message,
+          timeout: 10
+        }, { root: true })
         store.commit('setLoading', null)
         store.commit('setError', message)
         return rej(error)
@@ -156,55 +163,3 @@ export const put = (_collection, _data, _title) => {
     })()
   })
 }
-
-
-  // async put({ commit, dispatch }, data) {
-  //   commit('setLoading', 'post', { root: true })
-
-  //   const id = data.id
-
-  //   delete data.id
-
-  //   await ref.doc(id).set(data, { merge: true })
-  //     .then(() => {
-  //       dispatch('get')
-  //       commit('setLoading', null, { root: true })
-  //       dispatch('notifications/post', {
-  //         // title: 'Update profil berhasil.',
-  //         body: 'Update mata pelajaran berhasil.',
-  //       }, { root: true })
-  //     })
-  //     .catch(err => {
-  //       dispatch('notifications/post', {
-  //         title: 'Update mata pelajaran gagal.',
-  //         body: err,
-  //         timeout: 10
-  //       }, { root: true })
-        
-  //       commit('setLoading', null, { root: true })
-  //     })
-  // }
-
-
-  // async remove({ commit, dispatch }, data) {
-  //   commit('setLoading', 'post', { root: true })
-
-  //   await ref.doc(data.id).delete()
-  //     .then(() => {
-  //       dispatch('get')
-  //       commit('setLoading', null, { root: true })
-  //       dispatch('notifications/post', {
-  //         // title: 'Update profil berhasil.',
-  //         body: `${ data.name } dihapus.`,
-  //       }, { root: true })
-  //     })
-  //     .catch(err => {
-  //       dispatch('notifications/post', {
-  //         title: `${ data.name } gagal dihapus.`,
-  //         body: err,
-  //         timeout: 10
-  //       }, { root: true })
-        
-  //       commit('setLoading', null, { root: true })
-  //     })
-  // }

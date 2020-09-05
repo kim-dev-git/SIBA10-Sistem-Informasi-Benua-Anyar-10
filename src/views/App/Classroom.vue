@@ -2,7 +2,9 @@
   <div id="classroom">
     <loading-state />
     <div v-if="!isLoading">
-      <data-list :data="classroom" :forms="formClassroom" />
+      {{ classroom }}
+      
+      <!-- <data-list :data="classroom" :forms="formClassroom" />
       
       <v-layout class="py-2 grey lighten-3">
         <div
@@ -17,7 +19,7 @@
             <span v-text="'Kelas'" class="mx-2" />
           </v-btn>
         </div>
-      </v-layout>
+      </v-layout> -->
     </div>
   </div>
 </template>

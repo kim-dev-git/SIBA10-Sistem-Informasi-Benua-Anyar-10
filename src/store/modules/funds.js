@@ -43,7 +43,6 @@ const actions = {
   },
   async put({}, data) {
     moment.locale('id')
-    data.createdAt = serverTimestamp()
     if(data.enteredAt) {
       var date = moment(data.enteredAt)
       data.enteredAt = Timestamp.fromDate(date._d)

@@ -1,7 +1,8 @@
-import { db, Timestamp } from '../../firebase'
+import { serverTimestamp, Timestamp } from '../../firebase'
+import moment from 'moment'
+import * as Api from '../apis'
 
 const END_POINT = 'classrooms'
-const ref = db.collection(END_POINT)
 
 const state = {
   collection: [],
@@ -18,125 +19,27 @@ const mutations = {
   },
 }
 
-const getters = {
-  //
-}
-
 const actions = {
-  async get({ commit }, id = null ) {
-    commit('setLoading', 'get', { root: true })
-
-    if(id) {
-      const q = await ref.doc(id).get()
-
-      var data = q.data()
-      data.id = q.id
-
-      commit('setClassroom', data)
-      commit('setLoading', null, { root: true })
-      
+  get({}, id = null) {
+    if(id !== null) {
+      return Api.get(END_POINT, id)
     } else {
-      ref.orderBy('generation', 'desc').get()
-        .then(q => {
-          let array = []
-          q.forEach(doc => {
-            let data = doc.data()
-            data.id = doc.id
-
-            array.push(data)
-          })
-          commit('setClassrooms', array)
-          commit('setLoading', null, { root: true })
-        })
+      return Api.get(END_POINT)
     }
+  }, 
+  async post({}, data) {
+    data.createdAt = serverTimestamp()
+    Api.post(END_POINT, data, `Kelas ${ data.name }(${ data.generation })`)
+    Api.get(END_POINT)
   },
-  async post({ commit, dispatch, rootState  }, data) {
-    commit('setLoading', 'post', { root: true })
-
-    delete data.id
-
-    const teachers = rootState.teachers.collection
-
-    teachers.forEach(teacher => {
-      if(teacher.name === data.homeroomName) {
-        data.homeroomID = teacher.id
-      }
-    })
-
-    await ref.add(data)
-      .then(() => {
-        dispatch('get')
-        commit('setLoading', null, { root: true })
-        dispatch('notifications/post', {
-          // title: 'Update profil berhasil.',
-          body: `${ data.name } berhasil ditambahkan.`,
-        }, { root: true })
-      })
-      .catch(err => {
-        dispatch('notifications/post', {
-          title: `${ data.name } gagal ditambahkan.`,
-          body: err,
-          timeout: 10
-        }, { root: true })
-        
-        commit('setLoading', null, { root: true })
-      })
+  async remove({}, data) {
+    Api.remove(END_POINT, data, `Kelas ${ data.name }(${ data.generation })`)
+    Api.get(END_POINT)
   },
-  async put({ commit, dispatch, rootState }, data) {
-    commit('setLoading', 'post', { root: true })
-
-    const id = data.id
-
-    delete data.id
-
-    const teachers = rootState.teachers.collection
-
-    teachers.forEach(teacher => {
-      if(teacher.name === data.homeroomName) {
-        data.homeroomID = teacher.id
-      }
-    })
-
-    await ref.doc(id).set(data, { merge: true })
-      .then(() => {
-        dispatch('get')
-        commit('setLoading', null, { root: true })
-        dispatch('notifications/post', {
-          // title: 'Update profil berhasil.',
-          body: 'Update mata pelajaran berhasil.',
-        }, { root: true })
-      })
-      .catch(err => {
-        dispatch('notifications/post', {
-          title: 'Update mata pelajaran gagal.',
-          body: err,
-          timeout: 10
-        }, { root: true })
-        
-        commit('setLoading', null, { root: true })
-      })
-  },
-  async remove({ commit, dispatch }, data) {
-    commit('setLoading', 'post', { root: true })
-
-    await ref.doc(data.id).delete()
-      .then(() => {
-        dispatch('get')
-        commit('setLoading', null, { root: true })
-        dispatch('notifications/post', {
-          // title: 'Update profil berhasil.',
-          body: `${ data.name } dihapus.`,
-        }, { root: true })
-      })
-      .catch(err => {
-        dispatch('notifications/post', {
-          title: `${ data.name } gagal dihapus.`,
-          body: err,
-          timeout: 10
-        }, { root: true })
-        
-        commit('setLoading', null, { root: true })
-      })
+  async put({}, data) {
+    data.editedAt = serverTimestamp()
+    Api.put(END_POINT, data, `Kelas ${ data.name }(${ data.generation })`)
+    Api.get(END_POINT)
   },
   
 }
@@ -144,7 +47,6 @@ const actions = {
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
   actions
 }

@@ -9,7 +9,8 @@
 
       <template #body="props">
         <tbody>
-        <tr v-for="(item, idx) in props.items" :key="idx">
+        <tr v-for="(item, idx) in props.items" :key="idx"
+          @click="onClick(item)">
           <td v-for="header in headers" :key="header.value">
             <slot name="row"
               :item="item"
@@ -71,6 +72,9 @@ export default {
   methods: {
     menuAction(action, item) {
       this.$emit(action, item)
+    },
+    onClick(item) {
+      this.$emit('click', item)
     }
   }
 }

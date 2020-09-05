@@ -5,10 +5,13 @@
 
     <data-table
       v-if="$vuetify.breakpoint.smAndUp"
+      @click="onClick($event)"
       @edit="onEdit($event)"
       @remove="onRemove($event)"
       :headers="headers"
-      :items="filteredItems()">
+      :items="filteredItems()"
+      :sortBy="sortBy"
+      :desc="desc">
 
       <template #row="{ value, header, item }">
         <slot name="column"
@@ -50,7 +53,9 @@ export default {
   props: [
     'forms',
     'headers',
-    'items'
+    'items',
+    'sortBy',
+    'desc',
   ],
   data: () => ({
     search: null,
