@@ -1,6 +1,16 @@
 <template>
   <div id="schedules">
-    <div>
+    <v-container>
+      <v-layout>
+        <v-spacer />
+        <v-btn
+          to="/app/matapelajaran"
+          class="text-none"
+          color="primary">
+          <v-icon v-text="'mdi-bookmark'" left />
+          <span v-text="'Mata Pelajaran'" />
+        </v-btn>
+      </v-layout>
       <div>
         <p v-text="'Collection'" />
         <v-layout v-for="data in schedules" :key="data.id">
@@ -15,7 +25,7 @@
         <p v-text="schedule" />
       </div>
       <v-btn @click="postSchedules()">Post</v-btn>
-    </div>
+    </v-container>
   </div>
 </template>
 
@@ -57,7 +67,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setPage', {
-      back: '/app',
+      back: null,
       title: 'Jadwal'
     })
 

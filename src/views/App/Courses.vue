@@ -1,24 +1,56 @@
 <template>
-  <div id="courses">
-    <div>
-      <v-btn id="button-edit-fab"
-        @click="newCourse()"
-        class="mb-13"
-        color="primary"
-        fixed
-        fab
-        bottom
-        right
-        >
-        <v-icon v-text="'mdi-plus'" />
-        <!-- <span v-text="'Tambah'" /> -->
-      </v-btn>
-      
-      <two-line-list id="courses-list"
+  <div id="course"
+    class="ma-n2 ml-n3">
+    <v-container>
+
+      <button-add @click="add()" />
+
+      <data-list id="course-data"
+        :headers="headers"
         :items="courses"
         :forms="formCourse"
-        @action="selectCourse($event)"
-      />
+        @edit="select($event), selectAction('edit')"
+        @remove="select($event), selectAction('remove')"
+        @action="select($event)">
+        
+          <template #column="{ value, header, item }">
+            <div v-if="header.value === 'action'"></div>
+            <div id="name"
+              v-else-if="header.value === 'name'">
+              <v-layout
+                class="text-no-wrap py-2">
+                <div>
+                  <p v-text="item.name" class="font-weight-bold mb-0" />
+                  <!-- <p v-text="item.abbreviation" class="text--secondary mb-0" /> -->
+                </div>
+              </v-layout>
+            </div>
+            <div id="createdAt"
+              v-else-if="header.value === 'createdAt'">
+              <v-layout
+                v-if="value"
+                class="text-no-wrap caption py-2">
+                <div
+                  class="text--secondary">
+                  <p v-text="'Diinput'" class="mb-0" />
+                  <p v-if="item.editedAt" v-text="'Diedit'" class="text--secondary mb-0" />
+                </div>
+                <div
+                  class="font-weight-bold">
+                  <p v-text="`: ${ $options.filters.dayDate(value) }`" class="mb-0" />
+                  <p v-if="item.editedAt" v-text="`: ${ $options.filters.dayDate(item.editedAt) }`" class="mb-0" />
+                </div>
+              </v-layout>
+            </div>
+            <p id="default"
+              v-else
+              v-text="value ? value : '-'"
+              class="py-4"
+              :class="header.align ? `text-${ header.align } mb-0` : 'mb-0'"
+            />
+          </template>
+
+      </data-list>
 
       <dialog-bottom id="dialog-menu"
         v-model="dialogMenu"
@@ -30,7 +62,7 @@
               <v-list-item
                 v-for="(action, index) in actions"
                 :key="index"
-                @click="selectAction(action.text)"
+                @click="selectAction(action.value)"
                 class="mx-n3"
                 color="primary">
                 <v-list-item-avatar>
@@ -45,7 +77,7 @@
       </dialog-bottom>
 
       <dialog-bottom id="dialog-edit"
-        @action="saveCourse()"
+        @action="post()"
         v-model="dialogEdit"
         :title="dialogTitle"
         buttonCancel="Batal"
@@ -55,7 +87,7 @@
       </dialog-bottom>
 
       <dialog-bottom id="dialog-delete"
-        @action="deleteCourse()"
+        @action="remove()"
         v-model="dialogDelete"
         :title="dialogTitle"
         buttonCancel="Batal"
@@ -67,26 +99,29 @@
           color="grey lighten-3"
           flat>
           <span
-            v-html="`Yakin hapus mata pelajaran <b>${ dataCourse.name }</b>?`"
+            v-html="`Yakin hapus data <b>${ dataCourse.name }</b>?`"
             class="text--secondary"
           />
         </v-card>
       </dialog-bottom>
 
-    </div>
+    </v-container>
   </div>
 </template>
 
 <script>
 
+import ButtonAdd from '../../components/ButtonAdd'
 import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
-import TwoLineList from '../../components/TwoLineList'
+import DataList from '../../components/DataList'
+
 export default {
   components: {
+    ButtonAdd,
     DialogBottom,
     FormList,
-    TwoLineList,
+    DataList,
   },
   data: () => ({
     dialogTitle: '',
@@ -94,13 +129,18 @@ export default {
     dialogEdit: false,
     dialogDelete: false,
     dataCourse: {},
+    headers: [
+      { text: 'Mata Pelajaran', value: 'name' },
+      { text: 'Singkatan', value: 'abbreviation' },
+      { text: '', value: 'action', sortable: false },
+    ],
     formCourse: [
       { label: 'Mata Pelajaran', value: 'name', type: 'text' },
       { label: 'Singkatan', value: 'abbreviation', type: 'text' },
     ],
     actions: [
-      { text: 'Edit', icon: 'mdi-pencil' },
-      { text: 'Hapus', icon: 'mdi-delete' },
+      { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
+      { text: 'Hapus', value: 'remove', icon: 'mdi-delete' },
     ],
   }),
   computed: {
@@ -112,34 +152,12 @@ export default {
     },
   },
   methods: {
-    getCourses() {
+    get() {
       this.$store.dispatch('courses/get')
+      this.$store.dispatch('courses/get', 'H3kURogEgo3tvehxwzuE')
     },
-    getCourse() {
-      // let id = 'YnwMCvyau7eVe7l3IwuS'
-      // this.$store.dispatch('courses/get', id)
-    },
-    selectCourse(course) {
-      this.dataCourse = course
-      this.dialogMenu = true
-    },
-    selectAction(action) {
-      this.dialogMenu = false
-      if(action === 'Edit') {
-        this.dialogTitle = 'Edit Mata Pelajaran'
-        this.dialogEdit = true
-      } else {
-        this.dialogTitle = 'Hapus Mata Pelajaran'
-        this.dialogDelete = true
-      }
-    },
-    newCourse() {
-      this.dataCourse = { id: null }
-      this.dialogTitle = 'Mata Pelajaran Baru'
-      this.dialogEdit = true
-    },
-    saveCourse() {
-      const data = this.dataCourse
+    post() {
+      var data = this.dataCourse
       if(data.id) {
         this.$store.dispatch('courses/put', data)
       } else {
@@ -149,22 +167,46 @@ export default {
       this.dialogTitle = ''
       this.dataCourse = {}
     },
-    deleteCourse() {
+    remove() {
       const data = this.dataCourse
       this.$store.dispatch('courses/remove', data)
       this.dialogDelete = false
       this.dialogTitle = ''
       this.dataCourse = {}
-    }
+    },
+
+    add() {
+      this.dataCourse = { id: null }
+      this.dialogTitle = 'Mata Pelajaran Baru'
+      this.dialogEdit = true
+    },
+
+    select(data) {
+      this.dataCourse = data
+      this.dialogMenu = true
+    },
+    selectAction(action) {
+      this.dialogMenu = false
+
+      switch (action) {
+        case 'edit':
+          this.dialogTitle = 'Edit Mata Pelajaran'
+          this.dialogEdit = true
+          break
+        case 'remove':
+          this.dialogTitle = 'Hapus Mata Pelajaran'
+          this.dialogDelete = true
+
+      }
+    },
   },
   mounted() {
     this.$store.dispatch('setPage', {
-      back: '/app',
+      back: '/app/jadwal',
       title: 'Mata Pelajaran'
     })
 
-    this.getCourses()
-    this.getCourse()
+    this.get()
   }
 }
 </script>

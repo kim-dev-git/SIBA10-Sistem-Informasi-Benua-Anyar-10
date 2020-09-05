@@ -7,6 +7,8 @@
       :value="form.value"
       :label="form.label"
       :type="form.type"
+      :prefix="form.prefix"
+      :suffix="form.suffix"
       color="primary"
     />
     <form-item-combobox
@@ -16,6 +18,8 @@
       :value="form.value"
       :label="form.label"
       :type="form.type"
+      :prefix="form.prefix"
+      :suffix="form.suffix"
       color="primary"
     />
   </div>

@@ -7,6 +7,8 @@
       class="mb-n4 font-weight-bold"
       :type="type"
       :color="color"
+      :prefix="prefix"
+      :suffix="suffix"
       flat
       clearable
       dense
@@ -24,6 +26,8 @@ export default {
     'label',
     'type',
     'color',
+    'prefix',
+    'suffix',
   ]
 }
 </script>

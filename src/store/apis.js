@@ -128,6 +128,7 @@ export const put = (_collection, _data, _title) => {
         store.commit('setError', null)
         const _id = _data.id
         delete _data.id
+        delete _data.createdAt
 
         var document = db.collection(_collection).doc(_id)
         await document.set(_data, { merge: true })

@@ -50,7 +50,7 @@ export default {
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: all .2s ease;
+    transition: all .16s ease;
   }
 
   .base-background {

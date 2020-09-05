@@ -54,6 +54,11 @@ Vue.use(VueRouter)
         name: 'Inventory',
         component: lazyLoad('App/Inventory'),
       },
+      {
+        path: 'danabos',
+        name: 'Funds',
+        component: lazyLoad('App/Funds'),
+      },
     ]
   },
   {

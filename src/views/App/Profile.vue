@@ -129,7 +129,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setPage', {
-      back: '/app',
+      back: null,
       title: 'Profil'
     })
   }

@@ -1,7 +1,8 @@
-import { serverTimestamp } from '../../firebase'
+import { serverTimestamp, Timestamp } from '../../firebase'
+import moment from 'moment'
 import * as Api from '../apis'
 
-const END_POINT = 'courses'
+const END_POINT = 'funds'
 
 const state = {
   collection: [],
@@ -9,10 +10,10 @@ const state = {
 }
 
 const mutations = {
-  setCourses(state, val) {
+  setFunds(state, val) {
     state.collection = val
   },
-  setCourse(state, val) {
+  setFund(state, val) {
     state.document = {}
     state.document = val
   },
@@ -27,17 +28,29 @@ const actions = {
     }
   }, 
   async post({}, data) {
+    moment.locale('id')
     data.createdAt = serverTimestamp()
-    Api.post(END_POINT, data, data.name)
+    if(data.enteredAt) {
+      var date = moment(data.enteredAt)
+      data.enteredAt = Timestamp.fromDate(date._d)
+    }
+    Api.post(END_POINT, data, data.type)
     Api.get(END_POINT)
   },
   async remove({}, data) {
-    Api.remove(END_POINT, data, data.name)
+    Api.remove(END_POINT, data, data.type)
     Api.get(END_POINT)
   },
   async put({}, data) {
+    moment.locale('id')
+    data.createdAt = serverTimestamp()
+    if(data.enteredAt) {
+      var date = moment(data.enteredAt)
+      data.enteredAt = Timestamp.fromDate(date._d)
+    }
+
     data.editedAt = serverTimestamp()
-    Api.put(END_POINT, data, data.name)
+    Api.put(END_POINT, data, data.type)
     Api.get(END_POINT)
   },
   

@@ -81,7 +81,7 @@ export default {
         var filterVal = this.search.toLowerCase()
         
         forms.forEach(form => {
-          if(form.value !== 'createdAt' && form.value !== 'editedAt') {
+          if(form.value !== 'createdAt' && form.value !== 'editedAt' && form.value !== 'enteredAt') {
             match(form.value, filterVal)
           }
         })
@@ -89,6 +89,7 @@ export default {
 
       return newArr
     },
+
     onClick(item) {
       this.$emit('click', item)
     },

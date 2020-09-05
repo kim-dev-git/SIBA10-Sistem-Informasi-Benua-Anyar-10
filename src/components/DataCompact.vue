@@ -1,5 +1,6 @@
 <template>
-  <div id="two-line-list">
+  <div id="two-line-list"
+    class="mb-15">
     <v-list
       two-line>
       <!-- <v-list-item-group> -->
