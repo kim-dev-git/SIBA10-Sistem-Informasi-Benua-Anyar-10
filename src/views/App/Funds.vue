@@ -1,7 +1,71 @@
 <template>
   <div id="fund"
     class="ma-n2 ml-n3">
+
     <v-container>
+      
+      <v-layout row class="mx-3 mt-2">
+        <v-flex xs12 md4>
+          <v-card
+            class="pa-4"
+            color="grey lighten-3"
+            flat>
+            <v-layout
+              class="align-center">
+              <v-sheet
+                class="pa-1 mr-3"
+                color="info"
+                rounded>
+                <v-icon v-text="'mdi-call-received'" color="white" />
+              </v-sheet>
+              <div>
+                <span v-text="'Pemasukan'" class="text--secondary caption" />
+                <p v-text="toCurrency(fundIn)" class="font-weight-bold mb-0 mt-n1" />
+              </div>
+            </v-layout>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md4 :class="$vuetify.breakpoint.mdAndUp ? 'px-2' : 'py-2'">
+          <v-card
+            class="pa-4"
+            color="grey lighten-3"
+            flat>
+            <v-layout
+              class="align-center">
+              <v-sheet
+                class="pa-1 mr-3"
+                color="error"
+                rounded>
+                <v-icon v-text="'mdi-call-made'" color="white" />
+              </v-sheet>
+              <div>
+                <span v-text="'Pengeluaran'" class="text--secondary caption" />
+                <p v-text="toCurrency(fundOut)" class="font-weight-bold mb-0 mt-n1" />
+              </div>
+            </v-layout>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md4>
+          <v-card
+            class="pa-4"
+            color="grey lighten-3"
+            flat>
+            <v-layout
+              class="align-center">
+              <v-sheet
+                class="pa-1 mr-3"
+                color="success"
+                rounded>
+                <v-icon v-text="'mdi-currency-usd-circle'" color="white" />
+              </v-sheet>
+              <div>
+                <span v-text="'Sisa Dana'" class="text--secondary caption" />
+                <p v-text="toCurrency(fundBalance)" class="font-weight-bold mb-0 mt-n1" />
+              </div>
+            </v-layout>
+          </v-card>
+        </v-flex>
+      </v-layout>
 
       <button-add @click="add()" />
 
@@ -184,6 +248,37 @@ export default {
       }
 
       return items
+    },
+    fundIn() {
+      if(!this.funds.length > 1) {
+        return 0
+      } else {
+        var total = 0
+        this.funds.forEach(v => {
+          if(v.type === 'pemasukan') {
+            total = total + Number(v.nominal)
+          }
+        })
+        return total
+      }
+    },
+    fundOut() {
+      if(!this.funds.length > 1) {
+        return 0
+      } else {
+        var total = 0
+        this.funds.forEach(v => {
+          if(v.type === 'pengeluaran') {
+            total = total + Number(v.nominal)
+          }
+        })
+        return total
+      }
+    },
+    fundBalance() {
+      const fundIn = this.fundIn
+      const fundOut = this.fundOut
+      return fundIn - fundOut
     }
   },
   methods: {

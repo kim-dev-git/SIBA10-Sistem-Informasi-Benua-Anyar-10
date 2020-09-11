@@ -10,7 +10,7 @@
       :prefix="prefix"
       :suffix="suffix"
       flat
-      clearable
+      :clearable="clearable"
       dense
       solo
       outlined
@@ -28,6 +28,7 @@ export default {
     'color',
     'prefix',
     'suffix',
+    'clearable',
   ]
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-sheet v-model="dialog" :persistent="persistent">
+  <v-bottom-sheet v-model="dialog" :persistent="persistent" :max-width="$vuetify.breakpoint.smAndUp ? '480px' : '100vw'">
     <v-sheet id="sheet">
       <p class="subtitle-1 font-weight-bold" v-text="title" />
       <slot />

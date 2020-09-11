@@ -1,51 +1,74 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
-    :mini-variant.sync="mini"
     app
+    :mini-variant="$vuetify.breakpoint.sm"
     :permanent="$vuetify.breakpoint.smAndUp"
-  >
-    <v-list-item class="px-2 py-1">
-      <v-avatar
-        class="mr-n2"
-        color="primary"
-        size="32"
-        v-bind="attrs"
-        v-on="on">
-        <span v-text="userProfile.name.substr(0, 1)" class="white--text subtitle-2" v-if="userProfile && userProfile.name" />
-      </v-avatar>
+    v-model="active" >
+    <v-list-item
+      class="pt-2">
+      <v-list-item-content>
+        <v-layout>
+        
+        <v-app-bar-nav-icon v-if="!$vuetify.breakpoint.smAndUp" class="mr-4 ml-n1" @click="active = !active" />
 
-      <v-list-item-title v-text="userProfile.name" class="ml-4" />
+        <img src="../assets/logo.png" width="24" />
 
-      <v-btn
-        icon
-        @click.stop="mini = !mini"
-      >
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
+        <v-list-item-title v-if="!$vuetify.breakpoint.sm" class="title ml-8" v-text="'SIBA-10'" />
+
+      </v-layout>
+      </v-list-item-content>
     </v-list-item>
 
-    <v-divider></v-divider>
+    <!-- <v-divider /> -->
 
-    <v-list dense>
+    <v-list
+      dense
+      nav
+    >
       <v-list-item
         v-for="item in menuNavigation"
-        active-class="active-navigation"
-        class="my-2"
         :key="item.text"
         :to="item.link"
+        active-class="info white--text"
         link
       >
-        <v-list-item-icon
-          :class="item.link === activeNavigation ? 'ml-n1' : ''" >
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
+        <v-tooltip right>
+          <template v-slot:activator="{ on, attrs }">
+            <v-list-item-icon
+              v-bind="attrs"
+              v-on="on">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ item.text }}</v-list-item-title>
-        </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <span v-text="item.text" />
+
+        </v-tooltip>
       </v-list-item>
     </v-list>
+    <template #append>
+      <v-layout column class="pa-4">
+        <v-btn v-if="!$vuetify.breakpoint.sm" outlined color="error" class="text-none" @click="signOut()">Keluar</v-btn>
+
+        <v-tooltip right v-else>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              class="ml-n1 error"
+              color="white"
+              icon>
+              <v-icon @click="signOut()" v-text="'mdi-logout'" />
+            </v-btn>
+          </template>
+          <span v-text="'Keluar'" />
+        </v-tooltip>
+      </v-layout>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -53,9 +76,9 @@
 
 import { mapState, mapGetters } from 'vuex'
 export default {
+  props: [ 'value' ],
   data: () => ({
-    drawer: null,
-    mini: true
+    active: null
   }),
   computed: {
     ...mapState([
