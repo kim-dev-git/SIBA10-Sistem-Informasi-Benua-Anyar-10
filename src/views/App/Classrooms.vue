@@ -226,7 +226,7 @@ export default {
 
     add() {
       this.dataClassroom = { id: null }
-      this.dialogTitle = 'Dana BOS Baru'
+      this.dialogTitle = 'Kelas Baru'
       this.dialogEdit = true
     },
 
@@ -239,11 +239,11 @@ export default {
 
       switch (action) {
         case 'edit':
-          this.dialogTitle = 'Edit Dana BOS'
+          this.dialogTitle = 'Edit Kelas'
           this.dialogEdit = true
           break
         case 'remove':
-          this.dialogTitle = 'Hapus Dana BOS'
+          this.dialogTitle = 'Hapus Kelas'
           this.dialogDelete = true
 
       }
