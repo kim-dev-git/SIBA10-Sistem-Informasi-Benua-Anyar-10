@@ -203,7 +203,7 @@ export default {
   methods: {
     get() {
       this.$store.dispatch('classrooms/get')
-      this.$store.dispatch('classrooms/get', 'H3kURogEgo3tvehxwzuE')
+      // this.$store.dispatch('classrooms/get', 'H3kURogEgo3tvehxwzuE')
     },
     post() {
       var data = this.dataClassroom

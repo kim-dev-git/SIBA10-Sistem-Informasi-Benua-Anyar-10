@@ -18,6 +18,21 @@ const mutations = {
   },
 }
 
+const getters = {
+  courseItems(state) {
+    var arr = []
+    state.collection.forEach(v => {
+      var obj = {
+        // text: v.name,
+        // value: v.abbreviation,
+        value: v.name,
+      }
+      arr.push(obj)
+    })
+    return arr
+  }
+}
+
 const actions = {
   get({}, id = null) {
     if(id !== null) {
@@ -46,6 +61,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

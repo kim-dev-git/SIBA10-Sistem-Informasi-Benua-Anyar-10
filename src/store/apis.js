@@ -15,11 +15,13 @@ export const get = (_collection, _id = null) => {
         if(_id !== null) {
           const document = db.collection(_collection).doc(_id)
           let result = await document.get()
-          let response = result.data()
+          if(!result.exists) { return }
+            let response = result.data()
+            response.id = _id
 
-          store.commit(_collection + '/' + setDocument, response)
-          store.commit('setLoading', null)
-          return response
+            store.commit(_collection + '/' + setDocument, response)
+            store.commit('setLoading', null)
+            return response
         } else {
           let query = db.collection(_collection)
           let response = []
@@ -42,6 +44,52 @@ export const get = (_collection, _id = null) => {
       }
       catch (error) {
         var message = `Error at API.get(${ _collection }/${ _id }): ${ error }`
+
+        store.dispatch('notifications/post', {
+          title: `Terjadi kesalahan.`,
+          body: message,
+          timeout: 10
+        }, { root: true })
+        store.commit('setLoading', null)
+        store.commit('setError', message)
+        return rej(error)
+      }
+    })()
+  })
+}
+
+
+export const getBy = (_collection, _by, _value) => {
+  return new Promise((res, rej) => {
+    (async () => {
+      try{
+        const capitalize = _collection.charAt(0).toUpperCase() + _collection.slice(1)
+        const setCollection = 'set' + capitalize
+        const setDocument = 'set' + capitalize.slice(0, -1)
+
+        store.commit('setLoading', 'get')
+        // store.commit('setError', null)
+        let query = db.collectionGroup(_collection)
+        .where(_by, '==', _value)
+        let response = []
+
+        await query.get().then(querySnapshot => {
+          let docs = querySnapshot.docs
+
+          for (let doc of docs) {
+            var selectedItem = doc.data()
+            selectedItem.id = doc.id
+            response.push(selectedItem)
+          }
+
+          store.commit(_collection + '/' + setCollection, response)
+          return res(response)
+        })
+
+        store.commit('setLoading', null)
+      }
+      catch (error) {
+        var message = `Error at API.get(${ _collection }/${ _by }(${ _value })): ${ error }`
 
         store.dispatch('notifications/post', {
           title: `Terjadi kesalahan.`,

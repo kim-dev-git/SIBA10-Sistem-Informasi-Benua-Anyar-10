@@ -154,7 +154,6 @@ export default {
   methods: {
     get() {
       this.$store.dispatch('courses/get')
-      this.$store.dispatch('courses/get', 'H3kURogEgo3tvehxwzuE')
     },
     post() {
       var data = this.dataCourse

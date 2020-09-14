@@ -50,6 +50,12 @@ Vue.use(VueRouter)
         component: lazyLoad('App/Schedules'),
       },
       {
+        path: 'jadwal/:id',
+        name: 'Schedule',
+        component: lazyLoad('App/Schedule'),
+        props: true
+      },
+      {
         path: 'inventaris',
         name: 'Inventory',
         component: lazyLoad('App/Inventory'),

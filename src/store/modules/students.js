@@ -2,7 +2,7 @@ import { serverTimestamp, Timestamp } from '../../firebase'
 import moment from 'moment'
 import * as Api from '../apis'
 
-const END_POINT = 'schedules'
+const END_POINT = 'students'
 
 const state = {
   collection: [],
@@ -11,14 +11,14 @@ const state = {
 }
 
 const mutations = {
-  setSchedules(state, val) {
+  setStudents(state, val) {
     state.collection = val
   },
-  setSchedule(state, val) {
+  setStudent(state, val) {
     state.document = {}
     state.document = val
   },
-  setScheduleByClass(state, val) {
+  setStudentByClass(state, val) {
     state.document = {}
     state.document = val
   },
@@ -34,16 +34,16 @@ const actions = {
   }, 
   async post({}, data) {
     data.createdAt = serverTimestamp()
-    Api.post(END_POINT, data, `Jadwal ${ data.course } Kelas ${ data.classroomName }(${ data.generation })`)
+    Api.post(END_POINT, data, `Siswa ${ data.name } Kelas ${ data.classroomName }(${ data.generation })`)
     Api.getBy(END_POINT, 'classroomID', data.classroomID)
   },
   async remove({}, data) {
-    Api.remove(END_POINT, data, `Jadwal ${ data.course } Kelas ${ data.classroomName }(${ data.generation })`)
+    Api.remove(END_POINT, data, `Siswa ${ data.name } Kelas ${ data.classroomName }(${ data.generation })`)
     Api.getBy(END_POINT, 'classroomID', data.classroomID)
   },
   async put({}, data) {
     data.editedAt = serverTimestamp()
-    Api.put(END_POINT, data, `Jadwal ${ data.course } Kelas ${ data.classroomName }(${ data.generation })`)
+    Api.put(END_POINT, data, `Siswa ${ data.name } Kelas ${ data.classroomName }(${ data.generation })`)
     Api.getBy(END_POINT, 'classroomID', data.classroomID)
   },
   

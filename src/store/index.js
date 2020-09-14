@@ -11,6 +11,7 @@ import teachers from './modules/teachers'
 import schedules from './modules/schedules'
 import inventorys from './modules/inventorys'
 import funds from './modules/funds'
+import students from './modules/students'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     schedules,
     inventorys,
     funds,
+    students,
   },
   state: {
     error: null,

@@ -29,6 +29,7 @@ auth.onAuthStateChanged(user => {
     let email = ''
 
     store.dispatch('teachers/get')
+    store.dispatch('courses/get')
 
     if(user.phoneNumber) { phoneNumber = user.phoneNumber.substring(3) }
     if(user.email) { email = user.email }
