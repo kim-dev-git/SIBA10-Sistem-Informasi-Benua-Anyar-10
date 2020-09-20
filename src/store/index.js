@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router'
-import { db, Timestamp } from '../firebase'
+import { db, auth } from '../firebase'
 
 import notifications from './modules/notifications'
 import users from './modules/users'
@@ -44,7 +44,8 @@ export default new Vuex.Store({
       { text: 'Inventaris', icon: 'mdi-counter', link: '/app/inventaris', permission: ['Tata Usaha'] },
       { text: 'Profil', icon: 'mdi-account', link: '/app/profil', permission: ['Guru', 'Tata Usaha'] },
     ],
-    generations: []
+    generations: [],
+    mySchedules: []
   },
   getters: {
     menuNavigation(state) {
@@ -92,6 +93,9 @@ export default new Vuex.Store({
     setGenerations(state, val) {
       state.generations = val
     },
+    setMySchedules(state, val) {
+      state.mySchedules = val
+    },
   },
   actions: {
     setPage({ commit }, val) {
@@ -129,5 +133,21 @@ export default new Vuex.Store({
           })
       }
     },
+    async getMySchedules({ commit }) {
+      var uid = await auth.currentUser.uid
+      if(!uid) {
+        return
+      }
+      var q = db.collection('schedules').where('teacherID', '==', uid)
+      q.onSnapshot(v => {
+        var arr = []
+        v.forEach(d => {
+          var obj = d.data()
+          obj.id = d.id
+          arr.push(obj)
+        })
+        commit('setMySchedules', arr)
+      })
+    }
   }
 })

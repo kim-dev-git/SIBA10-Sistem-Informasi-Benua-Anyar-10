@@ -90,6 +90,11 @@ export default {
     userProfile() {
       return this.$store.state.users.profile
     }
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch('users/signout')
+    }
   }
 }
 </script>

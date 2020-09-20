@@ -111,6 +111,7 @@ export default {
       this.dialogProfile = false
       this.dataProfile = this.userProfile
     },
+    
     logout() {
       this.$store.dispatch('users/signout')
     }

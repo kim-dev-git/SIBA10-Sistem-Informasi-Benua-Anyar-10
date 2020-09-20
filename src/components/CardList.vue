@@ -6,7 +6,9 @@
         v-for="(item, index) in items"
         :key="index"
         :item="item"
-      />
+      >
+        <slot name="card" :item="item" />
+      </card-item>
     </v-layout>
   </div>
 </template>

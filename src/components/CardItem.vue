@@ -2,25 +2,27 @@
   <div id="card-item">
     <v-card
       height="120"
-      width="240"
+      width="320"
       class="ma-2 mb-4" >
-      <v-layout
-        class="pa-4 align-center"
-        :style="leftBorder(item.color)"  >
-        <div style="position: absolute; bottom: 1;">
-          <p class="mb-n1 title" v-text="item.title" />
-          <v-icon
-            small
-            left
-            class="text--secondary"
-            v-text="item.icon"
-          />
-          <span
-            class="caption text--secondary"
-            v-text="item.subtitle"
-          />
-        </div>
-      </v-layout>
+      <slot>
+        <v-layout
+          class="pa-4 align-center"
+          :style="leftBorder(item.color)"  >
+          <div style="position: absolute; bottom: 1;">
+            <p class="mb-n1 title" v-text="item.title" />
+            <v-icon
+              small
+              left
+              class="text--secondary"
+              v-text="item.icon"
+            />
+            <span
+              class="caption text--secondary"
+              v-text="item.subtitle"
+            />
+          </div>
+        </v-layout>
+      </slot>
     </v-card>
   </div>
 </template>

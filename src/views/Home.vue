@@ -53,14 +53,25 @@
             <v-icon v-text="'mdi-menu'" />
           </v-btn>
 
-          <v-btn id="menu-btn"
-            v-else
-            @click="goTo('/login')"
-            depressed
-            rounded>
-            <span v-text="'Login'" class="text-none" />
-            <v-icon v-text="'mdi-chevron-right'" right />
-          </v-btn>
+          <div
+            v-else>
+            <v-btn id="menu-btn"
+              v-if="!user.uid"
+              @click="goTo('/login')"
+              depressed
+              rounded>
+              <span v-text="'Login'" class="text-none" />
+              <v-icon v-text="'mdi-chevron-right'" right />
+            </v-btn>
+            <v-btn id="menu-btn"
+              v-else
+              @click="goTo('/app')"
+              depressed
+              rounded>
+              <span v-text="'Aplikasi'" class="text-none" />
+              <v-icon v-text="'mdi-chevron-right'" right />
+            </v-btn>
+          </div>
 
           <v-menu id="menu-btn-mobile"
             v-model="menuActive"
@@ -91,11 +102,21 @@
               class="base align-center py-6"
               column>
               <v-btn id="menu-btn-mobile-login"
+                v-if="!user.uid"
                 @click="goTo('/login')"
                 color="primary"
                 depressed
                 rounded>
                 <span v-text="'Login'" class="text-none" />
+                <v-icon v-text="'mdi-chevron-right'" right />
+              </v-btn>
+              <v-btn id="menu-btn-mobile-login"
+                v-else
+                @click="goTo('/app')"
+                color="primary"
+                depressed
+                rounded>
+                <span v-text="'Aplikasi'" class="text-none" />
                 <v-icon v-text="'mdi-chevron-right'" right />
               </v-btn>
             </v-layout>
@@ -165,6 +186,7 @@
 
 import BackgroundFill from '../components/BackgroundFill'
 import { mapState } from 'vuex'
+import { auth } from '../firebase'
 export default {
   name: 'Home',
   components: {
@@ -183,6 +205,14 @@ export default {
     ],
   }),
   computed: {
+    async user() {
+      const user = await auth.currentUser
+      if(user) {
+        return user
+      } else {
+        return null
+      }
+    }
   },
   methods: {
     goTo(link) {

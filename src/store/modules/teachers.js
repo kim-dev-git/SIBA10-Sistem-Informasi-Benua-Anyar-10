@@ -24,6 +24,7 @@ const getters = {
     state.collection.forEach(teacher => {
       var obj = teacher
       // obj.value = teacher.id
+      // obj.id = teacher.id
       obj.value = teacher.name
       obj.text = ''
       if(teacher.prefix) {

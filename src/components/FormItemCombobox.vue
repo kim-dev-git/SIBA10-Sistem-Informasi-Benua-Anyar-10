@@ -18,7 +18,6 @@
       :rounded="rounded"
       readonly
     />
-
     <dialog-bottom
       v-model="showOptions"
       :title="label">
@@ -29,7 +28,7 @@
           <v-list-item v-for="item in items"
             :key="item.value"
             :value="item.value"
-            @click="data[value] = item.value, showOptions = false"
+            @click="onClick(item)"
             class="round-all grey lighten-4 my-2"
             dense>
             <v-list-item-content>
@@ -61,8 +60,28 @@ export default {
   ],
   data: () => ({
     showOptions: false,
-    selected: null
-  })
+    selected: null,
+  }),
+  methods: {
+    onClick(item) {
+      var data = this.data
+      var prop = this.value
+      var propID = this.value + 'ID'
+
+      if(item.id) {
+        data[prop] = item.value
+        data[propID] = item.id
+      } else {
+        delete data[propID]
+        data[prop] = item.value
+      }
+
+      this.showOptions = false
+    }
+  },
+  mounted() {
+    //
+  }
 }
 </script>
 
