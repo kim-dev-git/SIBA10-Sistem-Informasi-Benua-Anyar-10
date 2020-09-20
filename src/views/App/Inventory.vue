@@ -9,6 +9,8 @@
         :headers="headers"
         :items="inventorys"
         :forms="formInventory"
+        :headersPrint="headersPrint"
+        title="Inventaris"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)">
@@ -154,6 +156,7 @@ import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
 import DataList from '../../components/DataList'
 
+
 export default {
   components: {
     ButtonAdd,
@@ -173,6 +176,14 @@ export default {
       { text: 'Keterangan', value: 'info' },
       { text: 'Tanggal', value: 'createdAt' },
       { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Barang', dataKey: 'name' },
+      { header: 'Jumlah', dataKey: 'qty' },
+      { header: 'Baik', dataKey: 'good' },
+      { header: 'Rusak', dataKey: 'damaged' },
+      { header: 'Keterangan', dataKey: 'info' },
+      // { header: 'Update terakhir', dataKey: 'editedAt' },
     ],
     formInventory: [
       { label: 'Nama Barang', value: 'name', type: 'text' },

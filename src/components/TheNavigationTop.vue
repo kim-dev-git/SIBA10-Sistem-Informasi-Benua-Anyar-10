@@ -16,12 +16,19 @@
         </v-btn>
         <v-btn
           v-else
+          @click="goTo('/app/profil')"
+          class="ml-n6"
+          icon>
+          <v-icon large v-text="'mdi-account-circle'"/>
+        </v-btn>
+        <!-- <v-btn
+          v-else
           class="ml-n6"
           style="opacity: 0"
           disabled
           icon>
           <v-icon large v-text="'mdi-chevron-left'"/>
-        </v-btn>
+        </v-btn> -->
       </slot>
 
       <v-spacer />

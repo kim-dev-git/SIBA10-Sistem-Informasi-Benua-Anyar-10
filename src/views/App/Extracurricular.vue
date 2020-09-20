@@ -1,24 +1,9 @@
 <template>
-  <div id="classroom">
+  <div id="extracurricular">
     <loading-state />
     <div v-if="!isLoading">
-
-      <v-layout>
-
-        <v-spacer />
-
-        <print-document
-          :title="`Detail Kelas ${ classroom.name }(${ classroom.generation })`"
-          :body="students"
-          :document="classroom"
-          :forms="formClassroom"
-          :headers="headersPrint"
-          :tableTitle="'Siswa'"
-          class="ma-3"
-        />
-      </v-layout>
       
-      <data-compact :items="formClassroom">
+      <data-compact :items="formExtracurricular">
 
         <template #avatar="{ item }">
           <v-list-item-avatar
@@ -35,7 +20,7 @@
         </template>
         
         <template #action="{ item }">
-          <span v-text="classroom[item.value]" class="font-weight-bold" />
+          <span v-text="extracurricular[item.value]" class="font-weight-bold" />
         </template>
 
       </data-compact>
@@ -54,7 +39,8 @@
         sortBy="name"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
-        @action="select($event)">
+        @action="select($event)"
+        :actionOff="true">
         
           <template #column="{ value, header, item }">
             <div v-if="header.value === 'action'"></div>
@@ -70,7 +56,12 @@
             <div>
               <div
                 class="mt-1">
-                <span v-text="item.name" class="subtitle-2 text--secondary" />
+                <v-layout>
+                  <span v-text="item.name" class="subtitle-2 text--secondary" />
+                  <v-spacer />
+                  <v-chip v-text="'Kelas ' + item.classroomName" color="info" class="mx-1" small />
+                  <v-chip v-text="item.generation" color="success" small />
+                </v-layout>
               </div>
               <v-chip :color="item.gender === 'Laki-laki' ? 'info' : 'error'" dark small>
                 <span v-text="item.gender" class="caption" />
@@ -128,7 +119,7 @@
           color="grey lighten-3"
           flat>
           <span
-            v-html="`Yakin hapus data siswa <b>${ dataStudent.name }(Kelas ${ dataStudent.classroomName })</b>?`"
+            v-html="`Yakin hapus data siswa <b>${ dataStudent.name }(Kelas ${ dataStudent.extracurricularName })</b>?`"
             class="text--secondary"
           />
         </v-card>
@@ -146,9 +137,6 @@ import DataCompact from '../../components/DataCompact'
 import ButtonAdd from '../../components/ButtonAdd'
 import DataList from '../../components/DataList'
 import FormList from '../../components/FormList'
-
-import PrintDocument from '../../components/PrintDocument'
-
 export default {
   components: {
     LoadingState,
@@ -157,32 +145,25 @@ export default {
     ButtonAdd,
     DataList,
     FormList,
-    PrintDocument,
   },
   props: [
     'id'
   ],
   data: () => ({
-    formClassroom: [
-      { label: 'Wali Kelas', value: 'homeroomName', type: 'text' },
-      { label: 'Angkatan', value: 'generation', type: 'number' },
-      { label: 'Kelas', value: 'name', type: 'number' },
+    formExtracurricular: [
+      { label: 'Nama Ekskul', value: 'name', type: 'text' },
+      { label: 'Pembina', value: 'teacher', type: 'combobox' },
     ],
     formStudent: [
-      { label: 'Nama Siswa', value: 'name', type: 'text' },
-      { label: 'Jenis Kelamin', value: 'gender', type: 'combobox' },
-      { label: 'Ekskul', value: 'extracurricular', type: 'combobox' },
+      { label: 'Siswa', value: 'student', type: 'combobox' },
+      // { label: 'Jenis Kelamin', value: 'gender', type: 'combobox' },
     ],
     headers: [
       { text: 'Nama Siswa', value: 'name' },
       { text: 'Jenis Kelamin', value: 'gender' },
-      { text: 'Ekskul', value: 'extracurricular' },
-      { text: '', value: 'action', sortable: false },
-    ],
-    headersPrint: [
-      { header: 'Nama Siswa', dataKey: 'name' },
-      { header: 'Jenis Kelamin', dataKey: 'gender' },
-      { header: 'Ekskul', dataKey: 'extracurricular' },
+      { text: 'Kelas', value: 'classroomName' },
+      { text: 'Angkatan', value: 'generation' },
+      // { text: '', value: 'action', sortable: false },
     ],
     dataStudent: {},
     dialogTitle: null,
@@ -199,23 +180,28 @@ export default {
     ]
   }),
   computed: {
-    classroom() {
-      return this.$store.state.classrooms.document
+    extracurricular() {
+      return this.$store.state.extracurriculars.document
     },
     students() {
-      return this.$store.state.students.collection
+      const items = this.$store.state.students.collection
+      const extracurricular = this.extracurricular.name
+      // console.log(extracurricular)
+      const filtered = items.filter(v => {
+        return v.extracurricular === extracurricular
+      })
+      return filtered
     },
     isLoading() {
       return this.$store.state.isLoading
     },
-    extracurricularItems() {
-      return this.$store.getters['extracurriculars/extracurricularItems']
+    studentItems() {
+      return this.$store.getters['students/studentItems']
     },
     comboboxItems() {
       
       var items = {
-        gender: this.gender,
-        extracurricular: this.extracurricularItems
+        student: this.studentItems
       }
 
       return items
@@ -228,17 +214,17 @@ export default {
       this.dialogEdit = true
     },
     get() {
-      this.$store.dispatch('extracurriculars/get')
-      this.$store.dispatch('students/get', this.id)
+      this.$store.dispatch('students/get')
+      // this.$store.dispatch('students/get', this.id)
     },
     post() {
       var data = this.dataStudent
       if(data.id) {
         this.$store.dispatch('students/put', data)
       } else {
-        data.classroomID = this.classroom.id
-        data.classroomName = this.classroom.name
-        data.generation = this.classroom.generation
+        data.extracurricularID = this.extracurricular.id
+        data.extracurricularName = this.extracurricular.name
+        data.generation = this.extracurricular.generation
         this.$store.dispatch('students/post', data)
       }
       this.dialogEdit = false
@@ -272,20 +258,20 @@ export default {
     },
   },
   watch: {
-    classroom: {
+    extracurricular: {
       immediate: true,
       handler() {
-        if(this.classroom && this.classroom.name) {
+        if(this.extracurricular && this.extracurricular.name) {
           this.$store.dispatch('setPage', {
-            back: '/app/kelas',
-            title: `Kelas ${ this.classroom.name } (${ this.classroom.generation })`
+            back: '/app/ekskul',
+            title: `Ekskul ${ this.extracurricular.name }`
           })
         }
       }
     }
   },
   mounted() {
-    this.$store.dispatch('classrooms/get', this.id)
+    this.$store.dispatch('extracurriculars/get', this.id)
     this.get()
   }
 }

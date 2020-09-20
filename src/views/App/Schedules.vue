@@ -35,6 +35,7 @@
         :items="classroomsByGeneration()"
         :forms="formClassroom"
         sortBy="name"
+        printOff="true"
         @click="$router.push('jadwal/' + $event.id)">
         
           <template #column="{ value, header, item }">

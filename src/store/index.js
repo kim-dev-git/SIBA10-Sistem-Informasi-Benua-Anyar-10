@@ -12,6 +12,7 @@ import schedules from './modules/schedules'
 import inventorys from './modules/inventorys'
 import funds from './modules/funds'
 import students from './modules/students'
+import extracurriculars from './modules/extracurriculars'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     inventorys,
     funds,
     students,
+    extracurriculars,
   },
   state: {
     error: null,
@@ -39,10 +41,11 @@ export default new Vuex.Store({
       { text: 'Dasbor', icon: 'mdi-view-dashboard', link: '/app', permission: ['Guru'] },
       { text: 'Jadwal', icon: 'mdi-calendar-clock', link: '/app/jadwal', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Kelas', icon: 'mdi-account-group', link: '/app/kelas', permission: ['Guru', 'Tata Usaha'] },
+      { text: 'Ekskul', icon: 'mdi-account-convert', link: '/app/ekskul', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Dana BOS', icon: 'mdi-currency-usd-circle', link: '/app/danabos', permission: ['Tata Usaha'] },
       { text: 'Nilai', icon: 'mdi-counter', link: '/app/nilai', permission: ['Guru'] },
       { text: 'Inventaris', icon: 'mdi-counter', link: '/app/inventaris', permission: ['Tata Usaha'] },
-      { text: 'Profil', icon: 'mdi-account', link: '/app/profil', permission: ['Guru', 'Tata Usaha'] },
+      // { text: 'Profil', icon: 'mdi-account', link: '/app/profil', permission: ['Guru', 'Tata Usaha'] },
     ],
     generations: [],
     mySchedules: []

@@ -24,6 +24,37 @@ const mutations = {
   },
 }
 
+const getters = {
+  studentItems(state) {
+    const items = []
+    state.collection.forEach(student => {
+      var obj = student
+
+      obj.text = `${ student.name } (${ student.classroomName }) [${ student.generation }]`
+      obj.value = student.name
+
+      items.push(obj)
+    })
+
+    function compare(a, b) {
+      // Use toUpperCase() to ignore character casing
+      const key = 'name'
+      const itemA = a[key].toUpperCase();
+      const itemB = b[key].toUpperCase();
+    
+      let comparison = 0;
+      if (itemA > itemB) {
+        comparison = 1;
+      } else if (itemA < itemB) {
+        comparison = -1;
+      }
+      return comparison;
+    }
+
+    return items.sort(compare)
+  },
+}
+
 const actions = {
   get({}, _id = null) {
     if(_id !== null) {
@@ -52,6 +83,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

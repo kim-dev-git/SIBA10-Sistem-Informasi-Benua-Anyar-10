@@ -28,6 +28,8 @@
         :items="classroomsByGeneration()"
         :forms="formClassroom"
         sortBy="name"
+        :headersPrint="headersPrint"
+        title="Daftar Kelas"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)"
@@ -166,6 +168,11 @@ export default {
       { text: 'Angkatan', value: 'generation' },
       { text: 'Wali Kelas', value: 'homeroomName' },
       { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Kelas', dataKey: 'name' },
+      { header: 'Angkatan', dataKey: 'generation' },
+      { header: 'Wali Kelas', dataKey: 'homeroomName' },
     ],
     formClassroom: [
       { label: 'Kelas', value: 'name', type: 'text' },

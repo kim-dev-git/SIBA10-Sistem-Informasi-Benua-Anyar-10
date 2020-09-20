@@ -65,6 +65,17 @@ Vue.use(VueRouter)
         name: 'Funds',
         component: lazyLoad('App/Funds'),
       },
+      {
+        path: 'ekskul',
+        name: 'Extracurriculars',
+        component: lazyLoad('App/Extracurriculars'),
+      },
+      {
+        path: 'ekskul/:id',
+        name: 'Extracurricular',
+        component: lazyLoad('App/Extracurricular'),
+        props: true
+      },
     ]
   },
   {

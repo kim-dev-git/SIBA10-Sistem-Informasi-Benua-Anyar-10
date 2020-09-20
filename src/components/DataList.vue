@@ -1,6 +1,11 @@
 <template>
   <div id="data-list">
-
+    <v-layout>
+      <v-spacer />
+      <print-table :title="title" :body="filteredItems()" :headers="headersPrint" :printOff="printOff" class="mr-3 mt-2" />
+    </v-layout>
+    
+    
     <data-search v-model="search" />
 
     <data-table
@@ -33,6 +38,9 @@
       <template #content="{ item }">
         <slot name="compact-content" :item="item" />
       </template>
+      <template v-if="actionOff" #action="{ item }">
+        <div></div>
+      </template>
 
     </data-compact>
 
@@ -44,11 +52,14 @@
 import DataSearch from './DataSearch'
 import DataTable from './DataTable'
 import DataCompact from './DataCompact'
+import PrintTable from './PrintTable'
+
 export default {
   components: {
     DataSearch,
     DataTable,
-    DataCompact
+    DataCompact,
+    PrintTable
   },
   props: [
     'forms',
@@ -56,6 +67,10 @@ export default {
     'items',
     'sortBy',
     'desc',
+    'actionOff',
+    'headersPrint',
+    'title',
+    'printOff',
   ],
   data: () => ({
     search: null,

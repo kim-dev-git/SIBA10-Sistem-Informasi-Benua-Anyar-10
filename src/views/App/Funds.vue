@@ -74,6 +74,8 @@
         :items="funds"
         :forms="formFund"
         sortBy="enteredBy"
+        :headersPrint="headersPrint"
+        title="Dana BOS"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)">
@@ -219,6 +221,12 @@ export default {
       { text: 'Nominal', value: 'nominal' },
       { text: 'Tanggal', value: 'enteredAt' },
       { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Keterangan', dataKey: 'info' },
+      { header: 'Tipe', dataKey: 'type' },
+      { header: 'Nominal', dataKey: 'nominal' },
+      { header: 'Tanggal', dataKey: 'enteredAt' },
     ],
     formFund: [
       { label: 'Keterangan', value: 'info', type: 'text' },
