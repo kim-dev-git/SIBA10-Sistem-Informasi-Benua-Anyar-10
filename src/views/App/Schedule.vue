@@ -30,6 +30,8 @@
             :items="scheduleByDay()"
             :forms="formSchedule"
             :sortBy="['day', 'from']"
+            :headersPrint="headersPrint"
+            :title="`Jadwal Kelas ${ classroom.name }(${ classroom.generation })`"
             @edit="select($event), selectAction('edit')"
             @remove="select($event), selectAction('remove')"
             @action="select($event)">
@@ -171,6 +173,13 @@ export default {
             { text: 'Pengajar', value: 'teacher' },
             { text: 'Waktu', value: 'time', align: 'right' },
             { text: '', value: 'action', sortable: false },
+        ],
+        headersPrint: [
+            { header: 'Hari', dataKey: 'day' },
+            { header: 'Mata Pelajaran', dataKey: 'course' },
+            { header: 'Pengajar', dataKey: 'teacher' },
+            { header: 'Dari Jam', dataKey: 'from' },
+            { header: 'Sampai Jam', dataKey: 'to' },
         ],
         formSchedule: [
             { label: 'Hari', value: 'day', type: 'combobox' },

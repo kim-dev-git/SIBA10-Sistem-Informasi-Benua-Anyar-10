@@ -13,6 +13,7 @@ import inventorys from './modules/inventorys'
 import funds from './modules/funds'
 import students from './modules/students'
 import extracurriculars from './modules/extracurriculars'
+import scores from './modules/scores'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     funds,
     students,
     extracurriculars,
+    scores,
   },
   state: {
     error: null,

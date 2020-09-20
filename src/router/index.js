@@ -76,6 +76,17 @@ Vue.use(VueRouter)
         component: lazyLoad('App/Extracurricular'),
         props: true
       },
+      {
+        path: 'nilai',
+        name: 'Scores',
+        component: lazyLoad('App/Scores'),
+      },
+      {
+        path: 'nilai/:id',
+        name: 'Score',
+        component: lazyLoad('App/Score'),
+        props: true
+      },
     ]
   },
   {

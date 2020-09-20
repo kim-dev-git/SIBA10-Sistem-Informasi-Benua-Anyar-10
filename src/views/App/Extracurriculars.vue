@@ -9,6 +9,8 @@
         :headers="headers"
         :items="extracurriculars"
         :forms="formExtracurricular"
+        :headersPrint="headersPrint"
+        title="Ekstrakurikuler"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)"
@@ -110,6 +112,10 @@ export default {
       { text: 'Nama Ekskul', value: 'name' },
       { text: 'Pembina', value: 'teacher' },
       { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Nama Ekskul', dataKey: 'name' },
+      { header: 'Pembina', dataKey: 'teacher' },
     ],
     formExtracurricular: [
       { label: 'Nama Ekskul', value: 'name', type: 'text' },

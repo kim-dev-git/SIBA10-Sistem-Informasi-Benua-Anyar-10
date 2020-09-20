@@ -1,7 +1,8 @@
-import { serverTimestamp } from '../../firebase'
+import { serverTimestamp, Timestamp } from '../../firebase'
+import moment from 'moment'
 import * as Api from '../apis'
 
-const END_POINT = 'courses'
+const END_POINT = 'scores'
 
 const state = {
   collection: [],
@@ -9,29 +10,13 @@ const state = {
 }
 
 const mutations = {
-  setCourses(state, val) {
+  setScores(state, val) {
     state.collection = val
   },
-  setCourse(state, val) {
+  setScore(state, val) {
     state.document = {}
     state.document = val
   },
-}
-
-const getters = {
-  courseItems(state) {
-    var arr = []
-    state.collection.forEach(v => {
-      var obj = {
-        // text: v.name,
-        // value: v.abbreviation,
-        value: v.name,
-        id: v.id
-      }
-      arr.push(obj)
-    })
-    return arr
-  }
 }
 
 const actions = {
@@ -44,16 +29,16 @@ const actions = {
   }, 
   async post({}, data) {
     data.createdAt = serverTimestamp()
-    Api.post(END_POINT, data, data.name)
+    Api.post(END_POINT, data, `Nilai ${ data.name }`)
     Api.get(END_POINT)
   },
   async remove({}, data) {
-    Api.remove(END_POINT, data, data.name)
+    Api.remove(END_POINT, data, `Nilai ${ data.name }`)
     Api.get(END_POINT)
   },
   async put({}, data) {
     data.editedAt = serverTimestamp()
-    Api.put(END_POINT, data, data.name)
+    Api.put(END_POINT, data, `Nilai ${ data.name }`)
     Api.get(END_POINT)
   },
   
@@ -62,7 +47,6 @@ const actions = {
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
   actions
 }

@@ -2,6 +2,21 @@
   <div id="extracurricular">
     <loading-state />
     <div v-if="!isLoading">
+
+      <v-layout>
+
+        <v-spacer />
+
+        <print-document
+          :title="`Detail Ekstrakurikuler ${ extracurricular.name }`"
+          :body="students"
+          :document="extracurricular"
+          :forms="formExtracurricular"
+          :headers="headersPrint"
+          :tableTitle="'Siswa'"
+          class="ma-3"
+        />
+      </v-layout>
       
       <data-compact :items="formExtracurricular">
 
@@ -37,6 +52,7 @@
         :items="students"
         :forms="formStudent"
         sortBy="name"
+        printOff="true"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)"
@@ -137,6 +153,7 @@ import DataCompact from '../../components/DataCompact'
 import ButtonAdd from '../../components/ButtonAdd'
 import DataList from '../../components/DataList'
 import FormList from '../../components/FormList'
+import PrintDocument from '../../components/PrintDocument'
 export default {
   components: {
     LoadingState,
@@ -145,6 +162,7 @@ export default {
     ButtonAdd,
     DataList,
     FormList,
+    PrintDocument,
   },
   props: [
     'id'
@@ -164,6 +182,12 @@ export default {
       { text: 'Kelas', value: 'classroomName' },
       { text: 'Angkatan', value: 'generation' },
       // { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Nama Siswa', dataKey: 'name' },
+      { header: 'Jenis Kelamin', dataKey: 'gender' },
+      { header: 'Kelas', dataKey: 'classroomName' },
+      { header: 'Angkatan', dataKey: 'generation' },
     ],
     dataStudent: {},
     dialogTitle: null,

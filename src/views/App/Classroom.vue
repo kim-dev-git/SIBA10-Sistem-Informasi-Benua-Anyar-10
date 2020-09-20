@@ -52,6 +52,7 @@
         :items="students"
         :forms="formStudent"
         sortBy="name"
+        printOff="true"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)">
