@@ -9,6 +9,13 @@
         color="grey lighten-5">
         <v-layout
         class="pa-4">
+          <v-btn
+            @click="$router.push('/app/jadwal')"
+            color="primary"
+          >
+            <v-icon v-text="'mdi-calendar-check'" class="ml-1" left />
+            <span v-text="'Jadwal'" class="text-none mr-1" />
+          </v-btn>
           <v-spacer />
           <v-btn
             @click="dialogGeneration = true"

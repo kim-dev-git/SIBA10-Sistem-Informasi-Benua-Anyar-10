@@ -169,7 +169,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setPage', {
-      back: null,
+      back: '/app/kelas',
       title: 'Jadwal'
     })
 

@@ -14,6 +14,7 @@ import funds from './modules/funds'
 import students from './modules/students'
 import extracurriculars from './modules/extracurriculars'
 import scores from './modules/scores'
+import attendance from './modules/attendance'
 
 Vue.use(Vuex)
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     students,
     extracurriculars,
     scores,
+    attendance,
   },
   state: {
     error: null,
@@ -41,7 +43,8 @@ export default new Vuex.Store({
     activeNavigation: null,
     menuNavigation: [
       { text: 'Dasbor', icon: 'mdi-view-dashboard', link: '/app', permission: ['Guru'] },
-      { text: 'Jadwal', icon: 'mdi-calendar-clock', link: '/app/jadwal', permission: ['Guru', 'Tata Usaha'] },
+      // { text: 'Jadwal', icon: 'mdi-calendar-clock', link: '/app/jadwal', permission: ['Guru', 'Tata Usaha'] },
+      { text: 'Absensi', icon: 'mdi-calendar', link: '/app/absensi', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Kelas', icon: 'mdi-account-group', link: '/app/kelas', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Ekskul', icon: 'mdi-account-convert', link: '/app/ekskul', permission: ['Guru', 'Tata Usaha'] },
       { text: 'Dana BOS', icon: 'mdi-currency-usd-circle', link: '/app/danabos', permission: ['Tata Usaha'] },

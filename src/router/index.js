@@ -87,6 +87,11 @@ Vue.use(VueRouter)
         component: lazyLoad('App/Score'),
         props: true
       },
+      {
+        path: 'absensi',
+        name: 'Attendance',
+        component: lazyLoad('App/Attendance'),
+      },
     ]
   },
   {

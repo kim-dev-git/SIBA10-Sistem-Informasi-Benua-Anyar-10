@@ -9,6 +9,7 @@ import VueQrcode from '@chenfengyuan/vue-qrcode'
 
 import './filters/fullDate'
 import './filters/dayDate'
+import './filters/fullTime'
 
 Vue.config.productionTip = false
 Vue.component(VueQrcode.name, VueQrcode)
