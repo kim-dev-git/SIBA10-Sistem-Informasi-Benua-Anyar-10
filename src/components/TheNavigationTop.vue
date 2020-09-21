@@ -231,6 +231,7 @@ export default {
           // title: 'Absen berhasil',
           body: 'Anda berhasil absen',
         })
+        this.$store.dispatch('attendance/get')
       }).catch(err => {
         this.$store.dispatch('notifications/post', {
           title: 'Absen gagal',
@@ -251,6 +252,8 @@ export default {
         // title: `${ documentQRCode.userName } berhasil absen`,
         body: `${ documentQRCode.userName } berhasil absen`,
       })
+
+      this.$store.dispatch('attendance/get')
       
       const ref = db.collection('metadata').doc(documentQRCode.id)
       // let remove = await ref.delete().then(() => {

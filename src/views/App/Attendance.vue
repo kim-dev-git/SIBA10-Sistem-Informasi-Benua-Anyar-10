@@ -148,7 +148,7 @@
           color="grey lighten-3"
           flat>
           <span
-            v-html="`Yakin hapus absensi <b>${ dataAttendance.name }</b>?`"
+            v-html="`Yakin hapus absensi <b>${ dataAttendance.userName }</b>?`"
             class="text--secondary"
           />
         </v-card>
