@@ -70,25 +70,20 @@ const actions = {
     Api.put(END_POINT, data, data.name)
     Api.get(END_POINT)
   },
+
   
-  // getStudents({ state }) {
-  //   const id = state.document.id
-  //   const SUB_END_POINT = END_POINT + '/' + id + '/extracurriculars'
-  //   return Api.get(SUB_END_POINT)
-  // },
-  // async postStudents({}, data) {
-  //   const id = state.document.id
-  //   const SUB_END_POINT = END_POINT + '/' + id + '/extracurriculars'
-  //   data.createdAt = serverTimestamp()
-  //   Api.post(SUB_END_POINT, data, data.name)
-  //   Api.get(SUB_END_POINT)
-  // },
-  // async remove({}, data) {
-  //   const id = state.document.id
-  //   const SUB_END_POINT = END_POINT + '/' + id + '/extracurriculars'
-  //   Api.remove(SUB_END_POINT, data, data.name)
-  //   Api.get(SUB_END_POINT)
-  // },
+  async addStudent({}, data) {
+    var obj = {
+      id: data.studentID,
+      extracurricular: data.extracurricular,
+      extracurricularID: data.extracurricularID,
+      editedAt: serverTimestamp()
+    }
+
+    Api.put('students', obj, data.student)
+    Api.get('students')
+    Api.get(END_POINT)
+  },
   
 }
 

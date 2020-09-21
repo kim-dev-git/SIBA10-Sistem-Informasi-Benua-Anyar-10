@@ -40,7 +40,7 @@
 
       </data-compact>
 
-      <!-- <button-add @click="add()" text="Tambah Siswa" /> -->
+      <button-add @click="add()" text="Tambah Siswa" />
 
       <v-layout
         class="grey lighten-4 mt-n16">
@@ -243,13 +243,15 @@ export default {
     },
     post() {
       var data = this.dataStudent
+      data.extracurricular = this.extracurricular.name
+      data.extracurricularID = this.extracurricular.id
       if(data.id) {
-        this.$store.dispatch('students/put', data)
+        // this.$store.dispatch('students/put', data)
       } else {
-        data.extracurricularID = this.extracurricular.id
-        data.extracurricularName = this.extracurricular.name
-        data.generation = this.extracurricular.generation
-        this.$store.dispatch('students/post', data)
+        // data.extracurricularID = this.extracurricular.id
+        // data.extracurricularName = this.extracurricular.name
+        // data.generation = this.extracurricular.generation
+        this.$store.dispatch('extracurriculars/addStudent', data)
       }
       this.dialogEdit = false
       this.dialogTitle = ''
