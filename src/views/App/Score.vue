@@ -201,7 +201,11 @@ export default {
         return this.$store.state.isLoading
       },
       scores() {
-        return this.$store.state.scores.collection
+        const items = this.$store.state.scores.collection
+        const id = this.id
+        return items.filter(v => {
+          return v.classroomID === id
+        })
       },
       classroom() {
         return this.$store.state.classrooms.document
