@@ -30,16 +30,16 @@ const actions = {
   }, 
   async post({}, data) {
     data.createdAt = serverTimestamp()
-    Api.post(END_POINT, data, data.name)
+    Api.post(END_POINT, data, 'Absensi ' + data.userName)
     Api.get(END_POINT)
   },
   async remove({}, data) {
-    Api.remove(END_POINT, data, data.name)
+    Api.remove(END_POINT, data, 'Absensi ' + data.userName)
     Api.get(END_POINT)
   },
   async put({}, data) {
     data.editedAt = serverTimestamp()
-    Api.put(END_POINT, data, data.name)
+    Api.put(END_POINT, data, 'Absensi ' + data.userName)
     Api.get(END_POINT)
   },
   

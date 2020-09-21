@@ -148,7 +148,7 @@
           color="grey lighten-3"
           flat>
           <span
-            v-html="`Yakin hapus data <b>${ dataAttendance.name }</b>?`"
+            v-html="`Yakin hapus absensi <b>${ dataAttendance.name }</b>?`"
             class="text--secondary"
           />
         </v-card>
@@ -185,7 +185,7 @@ export default {
     headers: [
       { text: 'Nama', value: 'userName' },
       { text: 'Tanggal absen', value: 'createdAt' },
-      // { text: '', value: 'action', sortable: false },
+      { text: '', value: 'action', sortable: false },
     ],
     headersPrint: [
       { header: 'Nama', dataKey: 'userName' },
@@ -199,12 +199,19 @@ export default {
       { label: 'Rusak', value: 'damaged', type: 'number' },
       { label: 'Keterangan', value: 'info', type: 'text' },
     ],
-    actions: [
-      { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
-      { text: 'Hapus', value: 'remove', icon: 'mdi-delete' },
-    ],
   }),
   computed: {
+    actions() {
+      let actions = []
+      const user = this.$store.state.users.profile
+      if(user.role === 'Tata Usaha') {
+      actions = [
+          // { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
+          { text: 'Hapus', value: 'remove', icon: 'mdi-delete' },
+        ]
+      }
+      return actions
+    },
     attendances() {
       const items = this.$store.state.attendance.collection
       const user = this.$store.state.users.profile
@@ -259,8 +266,8 @@ export default {
 
       switch (action) {
         case 'edit':
-          this.dialogTitle = 'Edit Inventaris'
-          this.dialogEdit = true
+          // this.dialogTitle = 'Edit Inventaris'
+          // this.dialogEdit = true
           break
         case 'remove':
           this.dialogTitle = 'Hapus Inventaris'
