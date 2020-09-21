@@ -40,7 +40,7 @@
 
       </data-compact>
 
-      <button-add @click="add()" text="Tambah Siswa" />
+      <!-- <button-add @click="add()" text="Tambah Siswa" /> -->
 
       <v-layout
         class="grey lighten-4 mt-n16">
