@@ -8,7 +8,7 @@
         <v-spacer />
 
         <print-document
-          :title="`Detail Kelas ${ classroom.name }(${ classroom.generation })`"
+          :title="`Siswa Kelas ${ classroom.name }(${ classroom.generation })`"
           :body="students"
           :document="classroom"
           :forms="formClassroom"

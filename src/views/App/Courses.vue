@@ -9,6 +9,8 @@
         :headers="headers"
         :items="courses"
         :forms="formCourse"
+        :headersPrint="headersPrint"
+        title="Daftar Mata Pelajaran"
         @edit="select($event), selectAction('edit')"
         @remove="select($event), selectAction('remove')"
         @action="select($event)">
@@ -133,6 +135,10 @@ export default {
       { text: 'Mata Pelajaran', value: 'name' },
       { text: 'Singkatan', value: 'abbreviation' },
       { text: '', value: 'action', sortable: false },
+    ],
+    headersPrint: [
+      { header: 'Mata Pelajaran', dataKey: 'name' },
+      { header: 'Singkatan', dataKey: 'abbreviation' },
     ],
     formCourse: [
       { label: 'Mata Pelajaran', value: 'name', type: 'text' },
