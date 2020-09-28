@@ -16,14 +16,14 @@
           <v-layout id="menu-navigation"
             v-if="$vuetify.breakpoint.mdAndUp">
             <v-btn
-              v-text="'Tentang Kami'"
+              v-text="'Visi'"
               class="text-none"
               color="white"
               text
               rounded
             />
             <v-btn
-              v-text="'Tentang Kami'"
+              v-text="'Misi'"
               class="text-none"
               color="white"
               text
@@ -199,8 +199,8 @@ export default {
       subtitle: 'Mengoptimalkan proses pembelajaran yang berwawasan lingkungan, mengembangkan IPTEK yang berwawasan lingkungan, dan membudayakan cinta lingkungan'
     },
     items: [
-      { text: 'Tentang Kami', icon: 'mdi-plus' },
-      { text: 'Tentang Kami', icon: 'mdi-plus' },
+      { text: 'Visi', icon: 'mdi-plus' },
+      { text: 'Misi', icon: 'mdi-plus' },
       { text: 'Tentang Kami', icon: 'mdi-plus' },
     ],
   }),
