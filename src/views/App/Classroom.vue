@@ -24,7 +24,8 @@
           <v-list-item-avatar
             v-if="item.icon"
             class="ml-n4 mr-0">
-            <v-icon v-text="item.icon" />
+            <img v-if="item.photoURL" :src="item.photoURL" />
+            <v-icon v-else v-text="item.icon" />
           </v-list-item-avatar>
         </template>
         
@@ -59,6 +60,15 @@
         
           <template #column="{ value, header, item }">
             <div v-if="header.value === 'action'"></div>
+            <div v-else-if="header.value === 'name'">
+              <v-list-item-avatar
+                class="ml-0"
+                color="red">
+                <img v-if="item.photoURL" :src="item.photoURL" />
+                <span v-else v-text="item.name.substr(0, 1)" class="white--text font-weight-bold" />
+              </v-list-item-avatar>
+              <span v-text="value" />
+            </div>
             <p id="default"
               v-else
               v-text="value ? value : '-'"
@@ -69,13 +79,28 @@
 
           <template #compact-content="{ item }">
             <div>
-              <div
-                class="mt-1">
-                <span v-text="item.name" class="subtitle-2 text--secondary" />
-              </div>
-              <v-chip :color="item.gender === 'Laki-laki' ? 'info' : 'error'" dark small>
-                <span v-text="item.gender" class="caption" />
-              </v-chip>
+              <v-layout>
+                <div>
+                  <v-list-item-avatar
+                    class="ml-0"
+                    color="red">
+                    <img v-if="item.photoURL" :src="item.photoURL" />
+                    <span v-else v-text="item.name.substr(0, 1)" class="white--text font-weight-bold" />
+                  </v-list-item-avatar>
+                </div>
+                <v-layout column>
+                  <div
+                    class="mt-1">
+                    <span v-text="item.name" class="subtitle-2 text--secondary" />
+                  </div>
+                  <div>
+                    <v-chip :color="item.gender === 'Laki-laki' ? 'info' : 'error'" dark small>
+                      <span v-text="item.gender" class="caption" />
+                    </v-chip>
+                  </div>
+                </v-layout>
+                
+              </v-layout>
             </div>
 
           </template>
@@ -150,6 +175,8 @@ import FormList from '../../components/FormList'
 
 import PrintDocument from '../../components/PrintDocument'
 
+import { storage } from '../../firebase'
+
 export default {
   components: {
     LoadingState,
@@ -173,6 +200,7 @@ export default {
       { label: 'Nama Siswa', value: 'name', type: 'text' },
       { label: 'Jenis Kelamin', value: 'gender', type: 'combobox' },
       { label: 'Ekskul', value: 'extracurricular', type: 'combobox' },
+      { label: 'Foto', value: 'photo', type: 'file' },
     ],
     headers: [
       { text: 'Nama Siswa', value: 'name' },
@@ -232,8 +260,22 @@ export default {
       this.$store.dispatch('extracurriculars/get')
       this.$store.dispatch('students/get', this.id)
     },
-    post() {
+    async post() {
       var data = this.dataStudent
+
+      if(data.photo) {
+        const storageRef = storage
+          .ref('students')
+          .child(this.id)
+          .child(data.photo.name)
+
+          await storageRef.put(data.photo)
+
+        data.photoURL = await storageRef.getDownloadURL()
+        
+        delete data.photo
+      }
+
       if(data.id) {
         this.$store.dispatch('students/put', data)
       } else {

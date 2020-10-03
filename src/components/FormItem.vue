@@ -2,7 +2,8 @@
   <div id="form-item">
     <form-item-input
       v-if="form.type !== 'combobox'
-        && form.type !== 'textarea'"
+        && form.type !== 'textarea'
+        && form.type !== 'file'"
       :data="data"
       :value="form.value"
       :label="form.label"
@@ -12,7 +13,7 @@
       color="primary"
     />
     <form-item-combobox
-      v-if="form.type === 'combobox'"
+      v-else-if="form.type === 'combobox'"
       :items="items"
       :data="data"
       :value="form.value"
@@ -22,6 +23,12 @@
       :suffix="form.suffix"
       color="primary"
     />
+    <div v-else-if="form.type === 'file'">
+      <v-file-input
+        v-model="data[form.value]"
+        :label="form.label"
+      />
+    </div>
   </div>
 </template>
 

@@ -43,6 +43,19 @@
                 </div>
               </v-layout>
             </div>
+            <div id="photo"
+              v-else-if="header.value === 'photo'"
+            >
+              <v-btn v-if="item.photoURL"
+                @click="photoURL = item.photoURL, dialogPhoto = true"
+                color="primary"
+                small
+                text
+              >
+                <v-icon v-text="'mdi-image'" left />
+                <span v-text="'Tampilkan Foto'" class="text-none" />
+              </v-btn>
+            </div>
             <div id="createdAt"
               v-else-if="header.value === 'createdAt'">
               <v-layout
@@ -145,6 +158,16 @@
         </v-card>
       </dialog-bottom>
 
+      <dialog-bottom id="dialog-photo"
+        v-model="dialogPhoto"
+        buttonCancel="Tutup"
+      >
+        <v-layout class="justify-center pb-2">
+          <img v-if="photoURL" :src="photoURL" width="440" />
+        </v-layout>
+        
+      </dialog-bottom>
+
     </v-container>
   </div>
 </template>
@@ -156,6 +179,8 @@ import DialogBottom from '../../components/DialogBottom'
 import FormList from '../../components/FormList'
 import DataList from '../../components/DataList'
 
+import { storage } from '../../firebase'
+
 
 export default {
   components: {
@@ -165,7 +190,9 @@ export default {
     DataList,
   },
   data: () => ({
+    photoURL: null,
     dialogTitle: '',
+    dialogPhoto: false,
     dialogMenu: false,
     dialogEdit: false,
     dialogDelete: false,
@@ -175,6 +202,7 @@ export default {
       { text: 'Kondisi', value: 'condition' },
       { text: 'Keterangan', value: 'info' },
       { text: 'Tanggal', value: 'createdAt' },
+      { text: 'Foto', value: 'photo' },
       { text: '', value: 'action', sortable: false },
     ],
     headersPrint: [
@@ -191,6 +219,7 @@ export default {
       { label: 'Baik', value: 'good', type: 'number' },
       { label: 'Rusak', value: 'damaged', type: 'number' },
       { label: 'Keterangan', value: 'info', type: 'text' },
+      { label: 'Foto', value: 'photo', type: 'file' },
     ],
     actions: [
       { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
@@ -210,8 +239,21 @@ export default {
       this.$store.dispatch('inventorys/get')
       this.$store.dispatch('inventorys/get', 'H3kURogEgo3tvehxwzuE')
     },
-    post() {
+    async post() {
       var data = this.dataInventory
+
+      if(data.photo) {
+        const storageRef = storage
+          .ref('inventory')
+          .child(data.photo.name)
+
+          await storageRef.put(data.photo)
+
+        data.photoURL = await storageRef.getDownloadURL()
+        
+        delete data.photo
+      }
+
       if(data.id) {
         this.$store.dispatch('inventorys/put', data)
       } else {
