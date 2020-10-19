@@ -56,6 +56,13 @@
                 <span v-text="'Tampilkan Foto'" class="text-none" />
               </v-btn>
             </div>
+            <div
+              v-else-if="header.value === 'getAt'"
+            >
+              <v-layout>
+                <span v-text="value ? $options.filters.fullDate(value) : '-'" />
+              </v-layout>
+            </div>
             <div id="createdAt"
               v-else-if="header.value === 'createdAt'">
               <v-layout
@@ -201,6 +208,7 @@ export default {
       { text: 'Barang', value: 'name' },
       { text: 'Kondisi', value: 'condition' },
       { text: 'Keterangan', value: 'info' },
+      { text: 'Tanggal Perolehan', value: 'getAt' },
       { text: 'Tanggal', value: 'createdAt' },
       { text: 'Foto', value: 'photo' },
       { text: '', value: 'action', sortable: false },
@@ -219,6 +227,7 @@ export default {
       { label: 'Baik', value: 'good', type: 'number' },
       { label: 'Rusak', value: 'damaged', type: 'number' },
       { label: 'Keterangan', value: 'info', type: 'text' },
+      { label: 'Tanggal Diperoleh', value: 'getAt', type: 'date' },
       { label: 'Foto', value: 'photo', type: 'file' },
     ],
     actions: [
@@ -241,6 +250,10 @@ export default {
     },
     async post() {
       var data = this.dataInventory
+
+      if(data && data.getAt) {
+        data.getAt = new Date(data.getAt)
+      }
 
       if(data.photo) {
         const storageRef = storage
