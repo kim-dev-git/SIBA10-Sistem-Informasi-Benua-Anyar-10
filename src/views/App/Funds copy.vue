@@ -4,7 +4,7 @@
 
     <v-container>
       
-      <!-- <v-layout row class="mx-3 mt-2">
+      <v-layout row class="mx-3 mt-2">
         <v-flex xs12 md4>
           <v-card
             class="pa-4"
@@ -65,7 +65,7 @@
             </v-layout>
           </v-card>
         </v-flex>
-      </v-layout> -->
+      </v-layout>
 
       <button-add @click="add()" />
 
@@ -82,19 +82,6 @@
         
           <template #column="{ value, header, item }">
             <div v-if="header.value === 'action'"></div>
-            <div v-else-if="header.value === 'detail'">
-              <v-layout
-                class="justify-end"
-              >
-                <v-btn
-                  @click="$router.push(`/app/danabos/${item.id}`)"
-                  color="primary"
-                  icon
-                >
-                  <v-icon v-text="'mdi-cart-arrow-down'" />
-                </v-btn>
-              </v-layout>
-            </div>
             <div id="type"
               v-else-if="header.value === 'type'"
               class="py-2">
@@ -230,26 +217,24 @@ export default {
     dialogDelete: false,
     dataFund: {},
     headers: [
-      // { text: 'Keterangan', value: 'type' },
+      { text: 'Keterangan', value: 'type' },
       { text: 'Nominal', value: 'nominal' },
       { text: 'Tanggal', value: 'enteredAt' },
-      { text: '', value: 'detail', sortable: false },
       { text: '', value: 'action', sortable: false },
     ],
     headersPrint: [
-      // { header: 'Keterangan', dataKey: 'info' },
-      // { header: 'Tipe', dataKey: 'type' },
-      { header: 'Masuk Tanggal', dataKey: 'enteredAt' },
+      { header: 'Keterangan', dataKey: 'info' },
+      { header: 'Tipe', dataKey: 'type' },
       { header: 'Nominal', dataKey: 'nominal' },
+      { header: 'Tanggal', dataKey: 'enteredAt' },
     ],
     formFund: [
-      // { label: 'Keterangan', value: 'info', type: 'text' },
-      // { label: 'Tipe', value: 'type', type: 'combobox' },
+      { label: 'Keterangan', value: 'info', type: 'text' },
+      { label: 'Tipe', value: 'type', type: 'combobox' },
       { label: 'Nominal', value: 'nominal', type: 'number', prefix: 'Rp. ' },
       { label: 'Tanggal', value: 'enteredAt', type: 'date' },
     ],
     actions: [
-      { text: 'Detail', value: 'edit', icon: 'mdi-cart-arrow-down' },
       { text: 'Edit', value: 'edit', icon: 'mdi-pencil' },
       { text: 'Hapus', value: 'remove', icon: 'mdi-delete' },
     ],

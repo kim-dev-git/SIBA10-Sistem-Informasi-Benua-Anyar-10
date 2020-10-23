@@ -66,6 +66,12 @@ Vue.use(VueRouter)
         component: lazyLoad('App/Funds'),
       },
       {
+        path: 'danabos/:id',
+        name: 'Fund',
+        component: lazyLoad('App/Fund'),
+        props: true
+      },
+      {
         path: 'ekskul',
         name: 'Extracurriculars',
         component: lazyLoad('App/Extracurriculars'),
